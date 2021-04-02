@@ -38,6 +38,7 @@ function App() {
             }).then(function(docRef) {
                 userId = docRef.id;
                 setloggedIn(true);
+                {vfhnjsd}
             })
             .catch(function(error) {
                 console.error("Error adding user: ", error);
