@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import db from "./firebase";
 import { useStateValue } from "./StateProvider";
 import firebase from "firebase";
-function Chat({ userId }) {
+function Chat() {
   const [input, setInput] = useState("");
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
@@ -18,14 +18,14 @@ function Chat({ userId }) {
   useEffect(() => {
     if (roomId) {
       db.collection("users")
-        .doc(userId)
+        .doc(user.uid)
         .collection("rooms")
         .doc(roomId)
         .onSnapshot(snapshot => {
           setRoomName(snapshot.data().name);
         });
       db.collection("users")
-        .doc(userId)
+        .doc(user.uid)
         .collection("rooms")
         .doc(roomId)
         .collection("messages")
@@ -40,7 +40,7 @@ function Chat({ userId }) {
     console.log(" ", input);
 
     db.collection("users")
-      .doc(userId)
+      .doc(user.uid)
       .collection("rooms")
       .doc(roomId)
       .collection("messages")

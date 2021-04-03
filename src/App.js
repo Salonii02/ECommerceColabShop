@@ -25,22 +25,28 @@ function App() {
     auth
       .signInWithPopup(provider)
       .then(result => {
-        console.log(result);
+        //console.log(result);
         dispatch({
           type: actionTypes.SET_USER,
           user: result.user
         });
+        // console.log(result);
         //for new user
         if (result.additionalUserInfo.isNewUser) {
-          db.collection("users")
-            .add({
-              name: result.user.displayName,
+          const userRef = db.collection("user");
+          console.log(result);
+         console.log(user);   
+         userRef.doc(result.user.uid).set({
+              uid : result.user.uid,
+              displayName: result.user.displayName,
               wishlist: [],
               cart: [],
+              groups: [],
               emailid: result.user.email
             })
             .then(docRef => {
-              setuserId(docRef.id);
+              //setuserId(result.user.uid);
+              //setuserId(docRef.id);
               setloggedIn(true);
             })
             .catch(error => {
@@ -48,13 +54,13 @@ function App() {
             });
         } else {
           setloggedIn(true);
-          db.collection("users").onSnapshot(snap => {
-            snap.forEach(doc => {
-              if (doc.data().emailid === result.user.email) {
-                setuserId(doc.id);
-              }
-            });
-          });
+          // db.collection("user").onSnapshot(snap => {
+          //   snap.forEach(doc => {
+          //     if (doc.data().emailid === result.user.email) {
+                //setuserId(result.user.uid);
+          //     }
+          //   });
+          // });
         }
       })
       .catch(error => alert(error.message));
@@ -82,7 +88,7 @@ function App() {
           {!intermediate ? (
             <div>
               <Router>
-                <Link to={`/users/${userId}`}>
+                <Link>
                   <button
                     onClick={() => {
                       setintermediate(true);
@@ -97,12 +103,12 @@ function App() {
             /* <h1>Let's build Whatsapp Clone</h1>  */
             <div className="app__body">
               <Router>
-                <SideBar userId={userId} />
+                <SideBar />
                 <Switch>
-                  {/*Sidebar */}
+               
                   <Route path="/rooms/:roomId">
-                    <Chat userId={userId} />
-                    {/* Chat */}
+                    <Chat/>
+                  
                   </Route>
                   <Route path="/">
                     <Chat />
