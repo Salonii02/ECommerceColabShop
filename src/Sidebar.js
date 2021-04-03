@@ -7,16 +7,20 @@ import './Sidebar.css';
 import SidebarChat from './SidebarChat';
 import {Avatar,IconButton} from '@material-ui/core';
 import db from "./firebase";
+// import  { useParams } from "react-router-dom";
 import { useStateValue } from './StateProvider';
 
-function Sidebar() {
+function Sidebar({userId}) {
     const [rooms, setRooms] = useState([]);
     const [{user},dispatch]=useStateValue();
     //const [messages, setMessages] = useState("");
-    
+    // const {userId,roomId}=useParams();
+   //console.log(typeof(userId));
+    //userId = userId[0];
+  //  console.log(typeof(userId),userId);
     useEffect(() => {
         // return () => {
-            const unsubscribe = db.collection('rooms').onSnapshot(snapshot => (
+            const unsubscribe = db.collection('users').doc(userId).collection('rooms').onSnapshot(snapshot => (
                 setRooms(snapshot.docs.map((doc) =>
                     ({
                         id: doc.id,
@@ -36,7 +40,7 @@ function Sidebar() {
             <Avatar src={user.photoURL}/>
             <div className="sidebar__headerRight">
                 <IconButton>
-                <DonutLargeIcon/>
+                 <DonutLargeIcon/>
                 </IconButton>
                 <IconButton>
                 <ChatIcon/>
@@ -57,7 +61,7 @@ function Sidebar() {
            {rooms.map(room => (
             //    <div>
             //    <h2>{room.data.name}</h2>
-               <SidebarChat key={room.id} id={room.id}
+               <SidebarChat key={room.id} userid={userId} id={room.id}
                name={room.data.name} />
             //    </div>
            ))}

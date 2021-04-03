@@ -3,21 +3,21 @@ import './SidebarChat.css';
 import { Avatar } from '@material-ui/core';
 import db from "./firebase"
 import {Link} from 'react-router-dom';
-// import { userId } from "./Login";
-import Login from "./Login";
-// import {Avatar,IconButton} from '@material-ui/core';
+import  { useParams } from "react-router-dom";
 
-function SidebarChat({id, name, addNewChat}) {
+
+function SidebarChat({userid,roomid, name, addNewChat}) {
     const [seed,setSeed] = useState('');
     const [messages, setMessages] = useState("");
-
+    //const {userid}=useParams();
+ //console.log(userid);
     useEffect(() =>{
-        if(id){
-            db.collection('rooms').doc(id).collection('messages').orderBy('timestamp','desc').onSnapshot(snapshot => (
+        if(roomid){
+            db.collection('users').doc(userid).collection('rooms').doc(roomid).collection('messages').orderBy('timestamp','desc').onSnapshot(snapshot => (
                 setMessages(snapshot.docs.map((doc) => doc.data()))
             ))
           }
-    },[id])
+    },[roomid])
     useEffect(()=>{
         setSeed(Math.floor(Math.random()*5000));
     },[])
@@ -26,14 +26,16 @@ function SidebarChat({id, name, addNewChat}) {
         const roomName = prompt("Please enter name for chat room");
 
         if(roomName){
-            db.collection("rooms").add({
+           // console.log(userid);
+            db.collection('users').doc(userid).collection("rooms").add({
                 name: roomName,
+                members: []
             });
         }
     };
 
     return !addNewChat ?(
-        <Link to = {`/rooms/${id}`}>
+        <Link to = {`users/${userid}/rooms/${roomid}`}>
         <div className="sidebarChat">
           <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
           <div className="sidebarChat__info">
@@ -49,4 +51,4 @@ function SidebarChat({id, name, addNewChat}) {
     )
 }
 
-export default SidebarChat
+export default SidebarChat;

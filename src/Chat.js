@@ -8,22 +8,22 @@ import  { useParams } from "react-router-dom";
 import db from './firebase';
 import { useStateValue } from './StateProvider';
 import firebase from "firebase"
-function Chat() {
+function Chat({userId}) {
     const [input,setInput] = useState('')
     const [seed,setSeed] = useState('');
-    const {userId, roomId } = useParams();
+    const {roomId } = useParams();
     const [roomName, setRoomName] = useState("");
     const [messages, setMessages] = useState([]);
     const [{user},dispatch]=useStateValue();
 
     useEffect(() => {
         if(roomId){
-            db.collection('rooms').doc(roomId).onSnapshot(
+            db.collection('users').doc(userId).collection('rooms').doc(roomId).onSnapshot(
                 snapshot =>{
-                    setRoomName(snapshot.data().name)
+                    setRoomName(snapshot.data().groupname)
                 }
             )
-            db.collection('rooms').doc(roomId).collection('messages').orderBy('timestamp','asc').onSnapshot( snapshot => (
+            db.collection('users').doc(userId).collection('rooms').doc(roomId).collection('messages').orderBy('timestamp','asc').onSnapshot( snapshot => (
                 setMessages(snapshot.docs.map(doc => doc.data()))
             ));
         }
@@ -37,7 +37,7 @@ function Chat() {
         e.preventDefault(); 
         console.log(" ",input);
         
-        db.collection('rooms').doc(roomId).collection('messages').add({
+        db.collection('users').doc(userId).collection('rooms').doc(roomId).collection('messages').add({
            name: user.displayName,
            message: input,
            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -84,7 +84,8 @@ function Chat() {
                 </p>
                
                 )
-                )}            </div>
+                )} 
+            </div>
             <div className="chat__footer">
             <InsertEmoticonIcon />
             <form>

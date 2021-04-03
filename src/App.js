@@ -17,34 +17,55 @@ function App() {
     // console.log(Login.userId);
   //  const[{},dispatch] = useStateValue();
     // const [userId,setuserId] = useState("") ;
-    let userId;
+    const [userId, setuserId] = useState("");
+   // const [users, setUsers] = useState("");
     const [loggedIn, setloggedIn] = useState(false);
     const [intermediate, setintermediate] = useState(false);
    
-    const signIn = () =>{
+    const signIn = () => {
         auth.signInWithPopup(provider).then(result=>{
-            console.log(result);
+           // console.log(result);
             dispatch({
                 type: actionTypes.SET_USER,
                 user: result.user,
             })
             //for new user
             if(result.additionalUserInfo.isNewUser){
-            db.collection('user').add({
+            db.collection('users').add({
                 name: result.user.displayName,
                 wishlist: [],
                 cart: [],
                 emailid: result.user.email,
             }).then(function(docRef) {
-                userId = docRef.id;
+                // userId = docRef.id;
+                setuserId(docRef.id);
+    //            console.log(userId)
                 setloggedIn(true);
-                {vfhnjsd}
             })
             .catch(function(error) {
                 console.error("Error adding user: ", error);
             });
         }
+        else{
+            // db.collection('user').onSnapshot(function(snap){
+            //     // const required= snap.filter((doc) => doc.data().emailid === result.user.email);
+            //         console.log(snap);    
+            // });
+            db.collection('users').onSnapshot(snap => { 
+                snap.forEach(doc => {
+                    if(doc.data().emailid === result.user.email){
+                        setuserId(doc.id);
+                    }
+                 });
+            });
+
+           // console.log("userid",userId);
+            //setuserId(users[result.user.email]);
+            setloggedIn(true);
+        }
         }).catch(error => alert(error.message));
+
+
     };
     return(
         <div className="app">
@@ -72,15 +93,15 @@ function App() {
             ) : (
             <div className="app__body">
                 <Router>
-                    <SideBar/>
+                    <SideBar userId={userId}/>
                         <Switch>
                             {/*Sidebar */}
-                            <Route path="/users/:userId/rooms/:roomId">
-                                <Chat />
+                            <Route path="/users/:userid">
+                                <Chat userId={userId}/>
                                 {/* Chat */}
                             </Route>
                             <Route path="/">
-                                <Chat />
+                                <Chat  userId={userId}/>
                             </Route>
                         </Switch>
                 </Router>
