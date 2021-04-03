@@ -15,7 +15,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 // import CustomisedHook from './CustomisedHook';
-import Select from 'react-select'
+import Select from "react-select";
 
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
@@ -23,41 +23,79 @@ function Sidebar() {
   //const [messages, setMessages] = useState("");
   const [addPrivate, setPrivate] = useState(false);
   const [addGroup, setGroup] = useState(false);
-
+  const [selectedUser, setselectedUser] = useState([]);
   const handlePrivateClose = () => setPrivate(false);
   const handlePrivateOpen = () => setPrivate(true);
   const handleGroupOpen = () => setGroup(true);
   const handleGroupClose = () => setGroup(false);
-  
+
+  function addGroupByUserID(groupid, users) {
+    users.forEach(userid =>
+      db
+        .collection("users")
+        .doc(userid)
+        .set({
+          group: group.push(groupid)
+        })
+        .then(() => {
+          console.log("Suc");
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    );
+  }
+
+  function addPrivateChat() {
+    const group = {
+      createdAt: new Date(),
+      createdBy: user.uid,
+      members: [user.uid, selectedUser.uid],
+      name: selectedUser.displayName,
+      type: 0 //private
+    };
+    //add group
+    db.collection("group")
+      .add(group)
+      .then(function (docRef) {
+        group.id = docRef.id;
+        //now add this group in the database of its members
+        //user -> group
+        addGroupByUserID(grou.id, [user.uid, selecteduser.uid]);
+        //resolve(group)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
   function fetchUsers() {
     //  console.log("aditi");
-    const allUsers=[];
-     db.collection("user")
-     .get()
-     .then((querySnapShot)=>{
-	    querySnapShot.forEach((doc)=>{
-	   	const user=doc.data();
-	   	allUsers.push(user);
-        	})
-   })
-   .catch((error)=>{
-  	alert(error);
-  })
-  console.log((allUsers));
-  console.log(typeof(allUsers)); 
-  return allUsers;
-};
-
+    const allUsers = [];
+    db.collection("user")
+      .get()
+      .then(querySnapShot => {
+        querySnapShot.forEach(doc => {
+          const user = doc.data();
+          allUsers.push(user);
+        });
+      })
+      .catch(error => {
+        alert(error);
+      });
+    console.log(allUsers);
+    console.log(typeof allUsers);
+    return allUsers;
+  }
   useEffect(() => {
     const unsubscribe = db
       .collection("user")
       .doc(user.uid)
       .collection("rooms")
-      .onSnapshot((snapshot) =>
+      .onSnapshot(snapshot =>
         setRooms(
-          snapshot.docs.map((doc) => ({
+          snapshot.docs.map(doc => ({
             id: doc.id,
-            data: doc.data(),
+            data: doc.data()
           }))
         )
       );
@@ -83,19 +121,24 @@ function Sidebar() {
             <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                To subscribe to this website, please enter your email address
-                here. We will send updates occasionally.
+                please enter your email address here.
               </DialogContentText>
               <Autocomplete
                 id="combo-box-demo"
                 options={fetchUsers()}
-                getOptionLabel={(option) => option.emailid}
+                onChange={(event, value) => setselectedUser(value)}
+                getOptionLabel={option => option.emailid}
                 style={{ width: 300 }}
-                renderInput={(params) => (
+                renderInput={params => (
                   <TextField {...params} label="Combo box" variant="outlined" />
                 )}
               />
             </DialogContent>
+            <DialogActions>
+              <Button onClick={addPrivateChat} color="primary">
+                Add Friend
+              </Button>
+            </DialogActions>
             <DialogActions>
               <Button onClick={handlePrivateClose} color="primary">
                 Cancel
@@ -103,7 +146,7 @@ function Sidebar() {
             </DialogActions>
           </Dialog>
           {/* </IconButton> */}
-         {/* <Select
+          {/* <Select
     defaultValue={(fetchUsers())[0].displayName}
     multi
     name="groups"
@@ -111,7 +154,7 @@ function Sidebar() {
     className="basic-multi-select"
     classNamePrefix="select"
     /> */}
-  {/*  import React, { Component } from 'react';
+          {/*  import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Select from 'react-select';
 
@@ -166,9 +209,9 @@ class App extends React.Component {
                 fullWidth
               />
               <DialogContentText>Add members</DialogContentText>
-             {/* <CustomisedHook/> */}
-            
-             {/* <Select
+              {/* <CustomisedHook/> */}
+
+              {/* <Select
     defaultValue={user.email}
     isMultiname="true"
     options={fetchUsers()}
@@ -177,7 +220,6 @@ class App extends React.Component {
     className="basic-multi-select"
     classNamePrefix="select"
   /> */}
-  
             </DialogContent>
             <DialogActions>
               <Button onClick={handleGroupClose} color="primary">
@@ -195,7 +237,7 @@ class App extends React.Component {
       </div>
       <div className="sidebar__chats">
         <SidebarChat addNewChat />
-        {rooms.map((room) => (
+        {rooms.map(room => (
           //    <div>
           //    <h2>{room.data.name}</h2>
           <SidebarChat key={room.id} id={room.id} name={room.data.name} />
