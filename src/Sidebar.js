@@ -3,6 +3,8 @@ import PrivateIcon from "@material-ui/icons/Add";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 import "./Sidebar.css";
+import { Multiselect } from "multiselect-react-dropdown";
+import firebase from 'firebase'
 import SidebarChat from "./SidebarChat";
 import { Avatar, Button, IconButton } from "@material-ui/core";
 import db from "./firebase";
@@ -14,8 +16,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-// import CustomisedHook from './CustomisedHook';
-import Select from "react-select";
+
 
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
@@ -24,52 +25,162 @@ function Sidebar() {
   const [addPrivate, setPrivate] = useState(false);
   const [addGroup, setGroup] = useState(false);
   const [selectedUser, setselectedUser] = useState([]);
+  const [newGroupMembers, setnewGroupMembers] = useState([]);
+  const [newGroupName,setnewGroupName]=useState([]);
   const handlePrivateClose = () => setPrivate(false);
   const handlePrivateOpen = () => setPrivate(true);
   const handleGroupOpen = () => setGroup(true);
   const handleGroupClose = () => setGroup(false);
 
   function addGroupByUserID(groupid, users) {
-    users.forEach(userid =>
-      db
-        .collection("users")
-        .doc(userid)
-        .set({
-          group: group.push(groupid)
-        })
-        .then(() => {
-          console.log("Suc");
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    );
+      var i=0;
+      for (i = 0; i < users.length; i++) {
+          db
+          .collection("user")
+          .doc(users[i])
+          .update({
+              groups : firebase.firestore.FieldValue.arrayUnion(groupid),
+            //  emailid: data.emailid
+          }).then( () => {
+            console.log("s");
+          }).catch(err => {
+            console.log(err);
+          })
+         
   }
+}
 
-  function addPrivateChat() {
-    const group = {
+ function addnewGroup(){
+   let newppl=[];
+   newGroupMembers.forEach((memeber)=>{
+     newppl.push(memeber.uid);
+   }) 
+   newppl.push(user.uid);
+     const group = {
       createdAt: new Date(),
-      createdBy: user.uid,
-      members: [user.uid, selectedUser.uid],
-      name: selectedUser.displayName,
-      type: 0 //private
+      createdBy: [user.uid, user.displayName],
+      members: newppl,
+      name: newGroupName,
+      type: 1 //group chat
     };
-    //add group
     db.collection("group")
       .add(group)
       .then(function (docRef) {
         group.id = docRef.id;
+        db.collection("group")
+          .doc(docRef.id)
+          .set(
+            {
+              id: docRef.id
+            },
+            { merge: true }
+          )
+          .then(() => console.log("sucessfully set"))
+          .catch(error => console.log(error));
         //now add this group in the database of its members
         //user -> group
-        addGroupByUserID(grou.id, [user.uid, selecteduser.uid]);
+       
+        addGroupByUserID(group.id, newGroupMembers.push(user.uid));
+        
         //resolve(group)
       })
       .catch(function (error) {
         console.log(error);
       });
+      // db.collection("group")
+      // .where("members", "array-contains", user.uid)
+      // .get()
+      // .then(querySnapshot => {
+      //   setRooms(
+      //     querySnapshot.docs.map(doc => ({
+      //       id: doc.id,
+      //       data: doc.data()
+      //     }))
+      //   );
+      // })
+      // .catch(error => {
+      //   console.log("Error getting documents: ", error);
+      // });
+      db.collection("group")
+      .where("members", "array-contains", user.uid)
+      .get()
+      .then(querySnapshot => {
+        setRooms(
+          querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            data: doc.data()
+          }))
+        );
+      })
+      .catch(error => {
+        console.log("Error getting documents: ", error);
+      });
+ }
+  function addPrivateChat() {
+    const group = {
+      createdAt: new Date(),
+      createdBy: [user.uid, user.displayName],
+      members: [user.uid, selectedUser.uid],
+      name: selectedUser.displayName,
+      type: 0 //private
+    };
+    //add group
+    
+    db.collection("group")
+      .add(group)
+      .then(function (docRef) {
+        group.id = docRef.id;
+        db.collection("group")
+          .doc(docRef.id)
+          .set(
+            {
+              id: docRef.id
+            },
+            { merge: true }
+          )
+          .then(() => console.log("sucessfully set"))
+          .catch(error => console.log(error));
+        //now add this group in the database of its members
+        //user -> group
+       
+        addGroupByUserID(group.id, [user.uid, selectedUser.uid]);
+        
+        //resolve(group)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      // db.collection("group")
+      // .where("members", "array-contains", user.uid)
+      // .get()
+      // .then(querySnapshot => {
+      //   setRooms(
+      //     querySnapshot.docs.map(doc => ({
+      //       id: doc.id,
+      //       data: doc.data()
+      //     }))
+      //   );
+      // })
+      // .catch(error => {
+      //   console.log("Error getting documents: ", error);
+      // });
+      db.collection("group")
+      .where("members", "array-contains", user.uid)
+      .get()
+      .then(querySnapshot => {
+        setRooms(
+          querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            data: doc.data()
+          }))
+        );
+      })
+      .catch(error => {
+        console.log("Error getting documents: ", error);
+      });
+
   }
   function fetchUsers() {
-    //  console.log("aditi");
     const allUsers = [];
     db.collection("user")
       .get()
@@ -82,28 +193,28 @@ function Sidebar() {
       .catch(error => {
         alert(error);
       });
-    console.log(allUsers);
-    console.log(typeof allUsers);
     return allUsers;
   }
+
+
   useEffect(() => {
-    const unsubscribe = db
-      .collection("user")
-      .doc(user.uid)
-      .collection("rooms")
-      .onSnapshot(snapshot =>
+    // db.collection('user').doc(user.uid).get()
+    //console.log("saloni");
+    db.collection("group")
+      .where("members", "array-contains", user.uid)
+      .get()
+      .then(querySnapshot => {
         setRooms(
-          snapshot.docs.map(doc => ({
+          querySnapshot.docs.map(doc => ({
             id: doc.id,
             data: doc.data()
           }))
-        )
-      );
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+        );
+      })
+      .catch(error => {
+        console.log("Error getting documents: ", error);
+      });
+  },[]);
   return (
     <div className="sidebar">
       <div className="sidebar__header">
@@ -145,56 +256,16 @@ function Sidebar() {
               </Button>
             </DialogActions>
           </Dialog>
-          {/* </IconButton> */}
-          {/* <Select
-    defaultValue={(fetchUsers())[0].displayName}
-    multi
-    name="groups"
-    options={fetchUsers()}
-    className="basic-multi-select"
-    classNamePrefix="select"
-    /> */}
-          {/*  import React, { Component } from 'react';
-import { render } from 'react-dom';
-import Select from 'react-select';
-
-const options = [
-  { value: 'a', label: 'a' },
-  { value: 'b', label: 'b' },
-];
-
-class App extends React.Component {
-  state = {
-    selectedOptions: [],
-  }
-
-  handleChange = (selectedOptions) => {
-    this.setState({ selectedOptions });
-  }
-
-  render() {
-    const { selectedOptions } = this.state;
-
-    return (
-      <React.Fragment>
-        <Select
-          isMulti
-          value={selectedOption}
-          onChange={this.handleChange}
-          options={options}
-        />
-      {selectedOptions.map(o => <p>{o.value}</p>)}
-      </React.Fragment>
-    );
-  }
-}
-  /> */}
           <Button onClick={handleGroupOpen}>
             <GroupAddIcon />
           </Button>
           <Dialog
             open={addGroup}
             onClose={handleGroupClose}
+            fullWidth
+            maxWidth="sm"
+            fullHeight
+            maxHeight="sm"
             aria-labelledby="form-dialog-title"
           >
             <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
@@ -206,21 +277,24 @@ class App extends React.Component {
                 id="name"
                 label="Group Name"
                 type="groupname"
+                value={newGroupName}
+                onChange={(event)=>{setnewGroupName(event.target.value)}}
                 fullWidth
               />
               <DialogContentText>Add members</DialogContentText>
-              {/* <CustomisedHook/> */}
-
-              {/* <Select
-    defaultValue={user.email}
-    isMultiname="true"
-    options={fetchUsers()}
-    getOptionLabel={(option) => option.emailid}
-    getOptionValue={(option) => option.emailid}
-    className="basic-multi-select"
-    classNamePrefix="select"
-  /> */}
+              <Multiselect 
+              options={fetchUsers()} 
+              displayValue="emailid"
+              onSelect={(selectedList,selectedItem) => {
+                  setnewGroupMembers(selectedList);
+              }}
+              />
             </DialogContent>
+            <DialogActions>
+              <Button onClick={addnewGroup} color="primary">
+                Add Group
+              </Button>
+            </DialogActions>
             <DialogActions>
               <Button onClick={handleGroupClose} color="primary">
                 Cancel
@@ -236,12 +310,15 @@ class App extends React.Component {
         </div>
       </div>
       <div className="sidebar__chats">
-        <SidebarChat addNewChat />
+        {/* <SidebarChat addNewChat /> */}
         {rooms.map(room => (
-          //    <div>
-          //    <h2>{room.data.name}</h2>
-          <SidebarChat key={room.id} id={room.id} name={room.data.name} />
-          //    </div>
+          <SidebarChat key={room.id} id={room.id} name={
+            room.data.type === 1 ? room.data.name : (
+            room.data.type == 0 && room.data.createdBy[0] === user.uid
+              ? room.data.name
+              : room.data.createdBy[1]
+            )
+          }  />
         ))}
       </div>
     </div>

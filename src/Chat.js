@@ -17,39 +17,43 @@ function Chat() {
 
   useEffect(() => {
     if (roomId) {
-      db.collection("users")
-        .doc(user.uid)
-        .collection("rooms")
+      db.collection("group")
         .doc(roomId)
         .onSnapshot(snapshot => {
-          setRoomName(snapshot.data().name);
-        });
-      db.collection("users")
-        .doc(user.uid)
-        .collection("rooms")
+          //console.log(snapshot.data());
+          setRoomName(
+             (
+                snapshot.data().type === 1 ? snapshot.data().name : (
+                snapshot.data().type === 0 && snapshot.data().createdBy[0] === user.uid
+           // " "  
+            ?snapshot.data().name
+            : snapshot.data().createdBy[1])
+             )
+          );
+        })
+        db.collection("messages")
         .doc(roomId)
-        .collection("messages")
+        .collection("message")
         .orderBy("timestamp", "asc")
-        .onSnapshot(snapshot =>
+        .onSnapshot(snapshot => {
           setMessages(snapshot.docs.map(doc => doc.data()))
+          }
         );
     }
   }, [roomId]);
   const sendMessage = e => {
     e.preventDefault();
-    console.log(" ", input);
+    //console.log(" ", input);
 
-    db.collection("users")
-      .doc(user.uid)
-      .collection("rooms")
+    db.collection("messages")
       .doc(roomId)
-      .collection("messages")
+      .collection("message")
       .add({
         name: user.displayName,
         message: input,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       })
-      .then()
+       .then()
       .catch();
     setInput("");
   };
