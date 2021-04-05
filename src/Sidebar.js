@@ -4,7 +4,7 @@ import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 import "./Sidebar.css";
 import { Multiselect } from "multiselect-react-dropdown";
-import firebase from 'firebase'
+import firebase from "firebase";
 import SidebarChat from "./SidebarChat";
 import { Avatar, Button, IconButton } from "@material-ui/core";
 import db from "./firebase";
@@ -17,7 +17,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
   const [{ user }, dispatch] = useStateValue();
@@ -26,37 +25,37 @@ function Sidebar() {
   const [addGroup, setGroup] = useState(false);
   const [selectedUser, setselectedUser] = useState([]);
   const [newGroupMembers, setnewGroupMembers] = useState([]);
-  const [newGroupName,setnewGroupName]=useState([]);
+  const [newGroupName, setnewGroupName] = useState([]);
   const handlePrivateClose = () => setPrivate(false);
   const handlePrivateOpen = () => setPrivate(true);
   const handleGroupOpen = () => setGroup(true);
   const handleGroupClose = () => setGroup(false);
 
   function addGroupByUserID(groupid, users) {
-      var i=0;
-      for (i = 0; i < users.length; i++) {
-          db
-          .collection("user")
-          .doc(users[i])
-          .update({
-              groups : firebase.firestore.FieldValue.arrayUnion(groupid),
-            //  emailid: data.emailid
-          }).then( () => {
-            console.log("s");
-          }).catch(err => {
-            console.log(err);
-          })
-         
+    var i = 0;
+    for (i = 0; i < users.length; i++) {
+      db.collection("user")
+        .doc(users[i])
+        .update({
+          groups: firebase.firestore.FieldValue.arrayUnion(groupid)
+          //  emailid: data.emailid
+        })
+        .then(() => {
+          console.log("s");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
-}
 
- function addnewGroup(){
-   let newppl=[];
-   newGroupMembers.forEach((memeber)=>{
-     newppl.push(memeber.uid);
-   }) 
-   newppl.push(user.uid);
-     const group = {
+  function addnewGroup() {
+    let newppl = [];
+    newGroupMembers.forEach(memeber => {
+      newppl.push(memeber.uid);
+    });
+    newppl.push(user.uid);
+    const group = {
       createdAt: new Date(),
       createdBy: [user.uid, user.displayName],
       members: newppl,
@@ -79,30 +78,43 @@ function Sidebar() {
           .catch(error => console.log(error));
         //now add this group in the database of its members
         //user -> group
-       
+
         addGroupByUserID(group.id, newGroupMembers.push(user.uid));
-        
+
         //resolve(group)
       })
       .catch(function (error) {
         console.log(error);
       });
-
-      // db.collection("group")
-      // .where("members", "array-contains", user.uid)
-      // .get()
-      // .then(querySnapshot => {
-      //   setRooms(
-      //     querySnapshot.docs.map(doc => ({
-      //       id: doc.id,
-      //       data: doc.data()
-      //     }))
-      //   );
-      // })
-      // .catch(error => {
-      //   console.log("Error getting documents: ", error);
-      // });
- }
+    // db.collection("group")
+    // .where("members", "array-contains", user.uid)
+    // .get()
+    // .then(querySnapshot => {
+    //   setRooms(
+    //     querySnapshot.docs.map(doc => ({
+    //       id: doc.id,
+    //       data: doc.data()
+    //     }))
+    //   );
+    // })
+    // .catch(error => {
+    //   console.log("Error getting documents: ", error);
+    // });
+    // // db.collection("group")
+    //   .where("members", "array-contains", user.uid)
+    //   .get()
+    //   .then(querySnapshot => {
+    //     setRooms(
+    //       querySnapshot.docs.map(doc => ({
+    //         id: doc.id,
+    //         data: doc.data()
+    //       }))
+    //     );
+    //   })
+    //   .catch(error => {
+    //     console.log("Error getting documents: ", error);
+    //   });
+  }
   function addPrivateChat() {
     const group = {
       createdAt: new Date(),
@@ -112,7 +124,7 @@ function Sidebar() {
       type: 0 //private
     };
     //add group
-    
+
     db.collection("group")
       .add(group)
       .then(function (docRef) {
@@ -129,30 +141,28 @@ function Sidebar() {
           .catch(error => console.log(error));
         //now add this group in the database of its members
         //user -> group
-       
+
         addGroupByUserID(group.id, [user.uid, selectedUser.uid]);
-        
+
         //resolve(group)
       })
       .catch(function (error) {
         console.log(error);
       });
-
-      // db.collection("group")
-      // .where("members", "array-contains", user.uid)
-      // .get()
-      // .then(querySnapshot => {
-      //   setRooms(
-      //     querySnapshot.docs.map(doc => ({
-      //       id: doc.id,
-      //       data: doc.data()
-      //     }))
-      //   );
-      // })
-      // .catch(error => {
-      //   console.log("Error getting documents: ", error);
-      // });
-
+    // db.collection("group")
+    //   .where("members", "array-contains", user.uid)
+    //   .get()
+    //   .then(querySnapshot => {
+    //     setRooms(
+    //       querySnapshot.docs.map(doc => ({
+    //         id: doc.id,
+    //         data: doc.data()
+    //       }))
+    //     );
+    //   })
+    //   .catch(error => {
+    //     console.log("Error getting documents: ", error);
+    //   });
   }
   function fetchUsers() {
     const allUsers = [];
@@ -170,7 +180,7 @@ function Sidebar() {
     return allUsers;
   }
 
- useEffect(() => {
+  useEffect(() => {
     // db.collection('user').doc(user.uid).get()
     console.log("saloni");
     db.collection("group")
@@ -247,16 +257,18 @@ function Sidebar() {
                 label="Group Name"
                 type="groupname"
                 value={newGroupName}
-                onChange={(event)=>{setnewGroupName(event.target.value)}}
+                onChange={event => {
+                  setnewGroupName(event.target.value);
+                }}
                 fullWidth
               />
               <DialogContentText>Add members</DialogContentText>
-              <Multiselect 
-              options={fetchUsers()} 
-              displayValue="emailid"
-              onSelect={(selectedList,selectedItem) => {
+              <Multiselect
+                options={fetchUsers()}
+                displayValue="emailid"
+                onSelect={(selectedList, selectedItem) => {
                   setnewGroupMembers(selectedList);
-              }}
+                }}
               />
             </DialogContent>
             <DialogActions>
