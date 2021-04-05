@@ -87,6 +87,7 @@ function Sidebar() {
       .catch(function (error) {
         console.log(error);
       });
+
       // db.collection("group")
       // .where("members", "array-contains", user.uid)
       // .get()
@@ -101,20 +102,6 @@ function Sidebar() {
       // .catch(error => {
       //   console.log("Error getting documents: ", error);
       // });
-      db.collection("group")
-      .where("members", "array-contains", user.uid)
-      .get()
-      .then(querySnapshot => {
-        setRooms(
-          querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            data: doc.data()
-          }))
-        );
-      })
-      .catch(error => {
-        console.log("Error getting documents: ", error);
-      });
  }
   function addPrivateChat() {
     const group = {
@@ -150,6 +137,7 @@ function Sidebar() {
       .catch(function (error) {
         console.log(error);
       });
+
       // db.collection("group")
       // .where("members", "array-contains", user.uid)
       // .get()
@@ -164,20 +152,6 @@ function Sidebar() {
       // .catch(error => {
       //   console.log("Error getting documents: ", error);
       // });
-      db.collection("group")
-      .where("members", "array-contains", user.uid)
-      .get()
-      .then(querySnapshot => {
-        setRooms(
-          querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            data: doc.data()
-          }))
-        );
-      })
-      .catch(error => {
-        console.log("Error getting documents: ", error);
-      });
 
   }
   function fetchUsers() {
@@ -196,25 +170,20 @@ function Sidebar() {
     return allUsers;
   }
 
-
-  useEffect(() => {
+ useEffect(() => {
     // db.collection('user').doc(user.uid).get()
-    //console.log("saloni");
+    console.log("saloni");
     db.collection("group")
       .where("members", "array-contains", user.uid)
-      .get()
-      .then(querySnapshot => {
+      .onSnapshot(querySnapshot => {
         setRooms(
           querySnapshot.docs.map(doc => ({
             id: doc.id,
             data: doc.data()
           }))
         );
-      })
-      .catch(error => {
-        console.log("Error getting documents: ", error);
       });
-  },[]);
+  }, []);
   return (
     <div className="sidebar">
       <div className="sidebar__header">
@@ -311,7 +280,8 @@ function Sidebar() {
       </div>
       <div className="sidebar__chats">
         {/* <SidebarChat addNewChat /> */}
-        {rooms.map(room => (
+        {
+          rooms.map(room => (
           <SidebarChat key={room.id} id={room.id} name={
             room.data.type === 1 ? room.data.name : (
             room.data.type == 0 && room.data.createdBy[0] === user.uid

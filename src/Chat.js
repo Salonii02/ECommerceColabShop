@@ -64,14 +64,14 @@ function Chat() {
         <div className="chat__headerInfo">
           <h3>{roomName}</h3>
           <p className="chat-room-last-seen">
-            Last seen{" "}
+            {/* Last seen{" "}
             {new Date(
               messages[messages.length - 1]?.timestamp?.toDate()
-            ).toUTCString()}
+            ).toUTCString()} */}
           </p>
         </div>
         <div className="chat__headerRight">
-          <IconButton>
+          {/* <IconButton>
             <SearchOutlined />
           </IconButton>
           <IconButton>
@@ -79,7 +79,7 @@ function Chat() {
           </IconButton>
           <IconButton>
             <MoreVert />
-          </IconButton>
+          </IconButton> */}
         </div>
       </div>
       <div className="chat__body">

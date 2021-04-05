@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
-// import { useStateValue } from './StateProvider';
 import SideBar from "./Sidebar.js";
 import Chat from "./Chat.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -10,6 +9,8 @@ import { Button } from "@material-ui/core";
 import { auth, provider } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import { actionTypes } from "./reducer";
+import NavBar from './components/NavBar/NavBar';
+import Products from './components/Products/Products';
 import db from "./firebase";
 
 function App() {
@@ -20,7 +21,26 @@ function App() {
   const [userId, setuserId] = useState("");
   const [loggedIn, setloggedIn] = useState(false);
   const [intermediate, setintermediate] = useState(false);
+  const [products, setProducts] = useState([]);
 
+    const fetchProducts = async() => {
+        //const {data} = await commerce.products.list();
+       // setProducts(
+            fetch('https://fakestoreapi.com/products')
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                setProducts(json);
+               // console.log(products);
+            });
+      //  );
+    }
+
+    useEffect(() => {
+        fetchProducts();
+        console.log("in use effect", products);
+    },[]); //executes once during the start
+    
   const signIn = () => {
     auth
       .signInWithPopup(provider)
@@ -45,8 +65,6 @@ function App() {
               emailid: result.user.email
             })
             .then(docRef => {
-              //setuserId(result.user.uid);
-              //setuserId(docRef.id);
               setloggedIn(true);
             })
             .catch(error => {
@@ -54,13 +72,6 @@ function App() {
             });
         } else {
           setloggedIn(true);
-          // db.collection("user").onSnapshot(snap => {
-          //   snap.forEach(doc => {
-          //     if (doc.data().emailid === result.user.email) {
-                //setuserId(result.user.uid);
-          //     }
-          //   });
-          // });
         }
       })
       .catch(error => alert(error.message));
@@ -84,42 +95,29 @@ function App() {
           </div>
         </div>
       ) : (
-        <div>
-          {!intermediate ? (
-            <div>
-              <Router>
-                <Link>
-                  <button
-                    onClick={() => {
-                      setintermediate(true);
-                    }}
-                  >
-                    Enter ColabShop
-                  </button>
-                </Link>
-              </Router>
-            </div>
-          ) : (
             /* <h1>Let's build Whatsapp Clone</h1>  */
+            <div className="app__productbody">
+              <NavBar/>
+              <div className="product">
+              
+            {products ?
+            <Products products={products}/>
+            : null
+            }
+              </div>
             <div className="app__body">
-              <Router>
-                <SideBar />
+             <Router>
+                  <SideBar />
                 <Switch>
-               
                   <Route path="/rooms/:roomId">
-                    <Chat/>
-                  
-                  </Route>
-                  <Route path="/">
                     <Chat />
                   </Route>
                 </Switch>
               </Router>
             </div>
+            </div>
           )}
         </div>
-      )}
-    </div>
   );
 }
 export default App;

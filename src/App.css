@@ -1,15 +1,37 @@
 .app{
   display: grid;
-  place-items: center;
-  background-color: #dadbd3;
+  place-items:center;
+  /* background-color:  #ffddf4;
+  background-repeat: repeat; */
   height:100vh;
+  /* position:; */
 }
 
 .app__body{
   display: flex;
+  /* position:fixed; */
+  /* flex: 1; */
   background-color: #ededed;
   margin-top: -50px;
   height:90vh;
-  width:90vw;
-  box-shadow: -1px 4px 20px -6px rgba(0,0,0,0.75)
+  width:40vw;
+  position: -webkit-sticky; 
+position: sticky;
+top: 0;
+z-index: 1;
+padding-top: 60px;
+
+  /* position: -webkit-sticky;
+  position: sticky; */
+
+  /* position: fixed; */
+  /* box-shadow: -1px 4px 20px -6px rgba(0,0,0,0.75) */
+}
+.app__productbody{
+  display: flex;
+  justify-content: space-evenly;
+  width:100%;
+}
+.product{
+  flex: 0.85;
 }
