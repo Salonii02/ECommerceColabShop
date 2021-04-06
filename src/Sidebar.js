@@ -60,6 +60,7 @@ function Sidebar() {
       createdBy: [user.uid, user.displayName],
       members: newppl,
       name: newGroupName,
+      wishlist: [],
       type: 1 //group chat
     };
     db.collection("group")
@@ -165,6 +166,7 @@ function Sidebar() {
     //   });
   }
   function fetchUsers() {
+    console.log("This is sidebarfetchuser");
     const allUsers = [];
     db.collection("user")
       .get()
@@ -177,6 +179,7 @@ function Sidebar() {
       .catch(error => {
         alert(error);
       });
+    console.log(allUsers);
     return allUsers;
   }
 
@@ -292,15 +295,18 @@ function Sidebar() {
       </div>
       <div className="sidebar__chats">
         {/* <SidebarChat addNewChat /> */}
-        {
-          rooms.map(room => (
-          <SidebarChat key={room.id} id={room.id} name={
-            room.data.type === 1 ? room.data.name : (
-            room.data.type == 0 && room.data.createdBy[0] === user.uid
-              ? room.data.name
-              : room.data.createdBy[1]
-            )
-          }  />
+        {rooms.map(room => (
+          <SidebarChat
+            key={room.id}
+            id={room.id}
+            name={
+              room.data.type === 1
+                ? room.data.name
+                : room.data.type == 0 && room.data.createdBy[0] === user.uid
+                ? room.data.name
+                : room.data.createdBy[1]
+            }
+          />
         ))}
       </div>
     </div>
