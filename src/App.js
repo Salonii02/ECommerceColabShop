@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Link } from "react-router-dom";
 import SideBar from "./Sidebar.js";
@@ -9,38 +9,60 @@ import { Button } from "@material-ui/core";
 import { auth, provider } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import { actionTypes } from "./reducer";
-import NavBar from './components/NavBar/NavBar';
-import Products from './components/Products/Products';
+import NavBar from "./components/NavBar/NavBar";
+import Products from "./components/Products/Products";
 import db from "./firebase";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
-  // console.log(Login.userId);
-  //  const[{},dispatch] = useStateValue();
-  // const [userId,setuserId] = useState("") ;
   const [userId, setuserId] = useState("");
   const [loggedIn, setloggedIn] = useState(false);
   const [intermediate, setintermediate] = useState(false);
   const [products, setProducts] = useState([]);
 
-    const fetchProducts = async() => {
-        //const {data} = await commerce.products.list();
-       // setProducts(
-            fetch('https://fakestoreapi.com/products')
-            .then(res => res.json())
-            .then(json => {
-                console.log(json);
-                setProducts(json);
-               // console.log(products);
-            });
-      //  );
-    }
+  const fetchProducts = () => {
+    fetch("https://fakestoreapi.com/products")
+      .then(res => res.json())
+      .then(json => {
+        console.log("SSSSSSSSSSDaaa");
+        console.log(json);
+        setProducts(json);
+      })
+      .catch(erorr => console.log("error whille fetching"));
+    //     products.map(product => {
+    //       db.collection("Items")
+    //         .add({
+    //           title: product.title,
+    //           price: product.price,
+    //           img: product.image,
+    //           category: product.category,
+    //           description: product.description
+    //         })
+    //         .then(function (docRef) {
+    //           product.id = docRef.id;
+    //           db.collection("Items")
+    //             .doc(docRef.id)
+    //             .set(
+    //               {
+    //                 id: docRef.id
+    //               },
+    //               { merge: true }
+    //             )
+    //             .then(() => console.log("sucessfully set"))
+    //             .catch(error => console.log(error));
+    //         })
+    //         .catch(error => console.log("Couldnt ADD dataitems"));
+    //     });
+    //     // console.log(products);
+    //   })
+    // //  );
+  };
 
-    useEffect(() => {
-        fetchProducts();
-        console.log("in use effect", products);
-    },[]); //executes once during the start
-    
+  useEffect(() => {
+    fetchProducts();
+    console.log("in use effect", products);
+  }, []); //executes once during the start
+
   const signIn = () => {
     auth
       .signInWithPopup(provider)
@@ -55,9 +77,11 @@ function App() {
         if (result.additionalUserInfo.isNewUser) {
           const userRef = db.collection("user");
           console.log(result);
-         console.log(user);   
-         userRef.doc(result.user.uid).set({
-              uid : result.user.uid,
+          console.log(user);
+          userRef
+            .doc(result.user.uid)
+            .set({
+              uid: result.user.uid,
               displayName: result.user.displayName,
               wishlist: [],
               cart: [],
@@ -91,33 +115,27 @@ function App() {
             <Button type="submit" onClick={signIn}>
               Sign in With Google
             </Button>
-            {/* <Link to={`/users/${userId}`}>Enter ColabShop</Link>  */}
           </div>
         </div>
       ) : (
-            /* <h1>Let's build Whatsapp Clone</h1>  */
-            <div className="app__productbody">
-              <NavBar/>
-              <div className="product">
-              
-            {products ?
-            <Products products={products}/>
-            : null
-            }
-              </div>
-            <div className="app__body">
-             <Router>
-                  <SideBar />
-                <Switch>
-                  <Route path="/rooms/:roomId">
-                    <Chat />
-                  </Route>
-                </Switch>
-              </Router>
-            </div>
-            </div>
-          )}
+        <div className="app__productbody">
+          <NavBar />
+          <div className="product">
+            {products ? <Products products={products} /> : null}
+          </div>
+          <div className="app__body">
+            <Router>
+              <SideBar />
+              <Switch>
+                <Route path="/rooms/:roomId">
+                  <Chat key={userId} />
+                </Route>
+              </Switch>
+            </Router>
+          </div>
         </div>
+      )}
+    </div>
   );
 }
 export default App;
