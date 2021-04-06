@@ -20,32 +20,24 @@ function App() {
   const [intermediate, setintermediate] = useState(false);
   const [products, setProducts] = useState([]);
 
-  const fetchProducts = () => {
+ const fetchProducts = () => {
     fetch("https://fakestoreapi.com/products")
       .then(res => res.json())
       .then(json => {
-        //console.log("SSSSSSSSSSDaaa");
+        console.log("SSSSSSSSSSDaaa");
         console.log(json);
-        setProducts(json);
       })
       .catch(erorr => console.log("error whille fetching"));
-    products.map(product => {
-      db.collection("Items")
-        .doc(product.id)
-        .set({
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          img: product.image,
-          category: product.category,
-          description: product.description
-        })
-        .then(() => {
-          console.log("Added");
-        })
-        .catch(error => console.log("Couldnt ADD dataitems"));
-    });
-    // console.log(products);
+    let Newproducts = [];
+    db.collection("Items")
+      .get()
+      .then(docs => {
+        docs.forEach(doc => {
+          Newproducts.push(doc.data());
+        });
+        setProducts(Newproducts);
+      })
+      .catch(error => console.log(error));
   };
 
   useEffect(() => {

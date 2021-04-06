@@ -2,6 +2,7 @@
     flex:0.65;  
     display: flex;
     flex-direction: column; 
+    width:15vh;
 }
 
 .chat__header{
@@ -17,10 +18,11 @@
 }
 .chat__headerInfo >h3{
     margin-bottom: 3px;
+    font-size: 16px;
     font-weight: 500;
 }
 .chat__headerInfo > p{
-    color: gray
+    color: gray;
 }
 .chat__headerRight{
     display: flex;
@@ -39,7 +41,7 @@
 
 .chat__message{
     position: relative;
-    font-size: 16px;
+    font-size: 10px;
     padding: 10px;
     background-color: white;
     border-radius: 10px;
