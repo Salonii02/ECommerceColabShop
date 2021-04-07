@@ -22,7 +22,7 @@ import firebase from "firebase";
 import TextField from "@material-ui/core/TextField";
 function Product({ product }) {
   const classes = useStyles();
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   const [openWishlist, setWishlist] = useState(false);
   const [openShare, setopenShare] = useState(false);
   const [input, setinput] = useState("");

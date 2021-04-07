@@ -6,7 +6,7 @@ import "./Sidebar.css";
 import { Multiselect } from "multiselect-react-dropdown";
 import firebase from "firebase";
 import SidebarChat from "./SidebarChat";
-import { Avatar, Button, IconButton } from "@material-ui/core";
+import { Avatar, Button } from "@material-ui/core";
 import db from "./firebase";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useStateValue } from "./StateProvider";
@@ -19,7 +19,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   //const [messages, setMessages] = useState("");
   const [addPrivate, setPrivate] = useState(false);
   const [addGroup, setGroup] = useState(false);
@@ -274,12 +274,12 @@ function Sidebar() {
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={addnewGroup} color="primary">
+              <Button onClick={addnewGroup} color="secondary">
                 Add Group
               </Button>
             </DialogActions>
             <DialogActions>
-              <Button onClick={handleGroupClose} color="primary">
+              <Button onClick={handleGroupClose} color="secondary">
                 Cancel
               </Button>
             </DialogActions>
@@ -301,7 +301,7 @@ function Sidebar() {
             name={
               room.data.type === 1
                 ? room.data.name
-                : room.data.type == 0 && room.data.createdBy[0] === user.uid
+                : room.data.type === 0 && room.data.createdBy[0] === user.uid
                 ? room.data.name
                 : room.data.createdBy[1]
             }

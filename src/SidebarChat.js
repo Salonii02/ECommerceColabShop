@@ -4,13 +4,9 @@ import { Avatar } from "@material-ui/core";
 import db from "./firebase";
 import { Link } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
-// import { userId } from "./Login";
-import Login from "./Login";
-// import {Avatar,IconButton} from '@material-ui/core';
-
 function SidebarChat({ id, name, addNewChat }) {
   const [messages, setMessages] = useState("");
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   useEffect(() => {
     if (id) {
       db.collection("users")
@@ -19,9 +15,9 @@ function SidebarChat({ id, name, addNewChat }) {
         .doc(id)
         .collection("messages")
         .orderBy("timestamp", "desc")
-        .onSnapshot(snapshot =>
-          setMessages(snapshot.docs.map(doc => doc.data()))
-        );
+        .onSnapshot(snapshot => {
+          setMessages(snapshot.docs.map(doc => doc.data()));
+        });
     }
   }, [id]);
 

@@ -11,20 +11,12 @@ import { actionTypes } from "./reducer";
 import NavBar from "./components/NavBar/NavBar";
 import Products from "./components/Products/Products";
 import db from "./firebase";
-import GroupWishlist from "./GroupWishlist";
 function App() {
   const [{ user }, dispatch] = useStateValue();
   const [loggedIn, setloggedIn] = useState(false);
   const [products, setProducts] = useState([]);
 
   const fetchProducts = () => {
-    fetch("https://fakestoreapi.com/products")
-      .then(res => res.json())
-      .then(json => {
-        console.log("SSSSSSSSSSDaaa");
-        console.log(json);
-      })
-      .catch(erorr => console.log("error whille fetching"));
     let Newproducts = [];
     db.collection("Items")
       .get()
@@ -36,10 +28,9 @@ function App() {
       })
       .catch(error => console.log(error));
   };
-
   useEffect(() => {
     fetchProducts();
-    console.log("in use effect", products);
+    // console.log("in use effect", products);
   }, []); //executes once during the start
 
   const signIn = () => {

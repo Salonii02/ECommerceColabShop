@@ -8,26 +8,20 @@ import {
   CardActionArea,
   Typography
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { Avatar, IconButton, Input } from "@material-ui/core";
+import { Avatar, IconButton } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import PollOutlinedIcon from "@material-ui/icons/PollOutlined";
-import MicIcon from "@material-ui/icons/Mic";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import { useParams } from "react-router-dom";
 import db from "./firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStateValue } from "./StateProvider";
 import firebase from "firebase";
-import Product from "./components/Products/Product/Product";
-import { Group, SettingsRemoteSharp } from "@material-ui/icons";
 import GroupWishlist from "./GroupWishlist";
 import { Grid } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles({
   root: {
@@ -44,9 +38,9 @@ function Chat() {
   const [items, setitems] = useState([]);
   const [roomName, setRoomName] = useState("");
   const [messages, setMessages] = useState([]);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   // //const [displayWishList, setdisplayWishlist] = useState(false);
-  const [wishlistgroup, setwishlistgroup] = useState([]);
+  //const [wishlistgroup, setwishlistgroup] = useState([]);
   const [Wishlist, setWishlist] = useState(false);
 
   ////const handleGroupWishlistOpen = () => setdisplayWishlist(true);
@@ -134,32 +128,32 @@ function Chat() {
       .catch();
     setInput("");
   };
-  function fetchGroupwishlist() {
-    let wishlist = [];
-    db.collection("group")
-      .doc(roomId)
-      .get()
-      .then(doc => {
-        wishlist = doc.data().wishlist;
-        console.log("Wishlist", wishlist);
-        //  setwishlistgroup(wishlist);
-        //  console.log(wishlistgroup);
-        let tempItems = [];
-        wishlist.forEach(itemid => {
-          db.collection("Items")
-            .doc(itemid)
-            .get()
-            .then(doc => {
-              tempItems.push(doc.data());
-              console.log("tempItems", doc.data());
-            })
-            .catch(error => console.log(error));
-        });
-        console.log("saloni", tempItems);
-        setitems(tempItems);
-      })
-      .catch(error => console.log(error));
-  }
+  // function fetchGroupwishlist() {
+  //   let wishlist = [];
+  //   db.collection("group")
+  //     .doc(roomId)
+  //     .get()
+  //     .then(doc => {
+  //       wishlist = doc.data().wishlist;
+  //       console.log("Wishlist", wishlist);
+  //       //  setwishlistgroup(wishlist);
+  //       //  console.log(wishlistgroup);
+  //       let tempItems = [];
+  //       wishlist.forEach(itemid => {
+  //         db.collection("Items")
+  //           .doc(itemid)
+  //           .get()
+  //           .then(doc => {
+  //             tempItems.push(doc.data());
+  //             console.log("tempItems", doc.data());
+  //           })
+  //           .catch(error => console.log(error));
+  //       });
+  //       console.log("saloni", tempItems);
+  //       setitems(tempItems);
+  //     })
+  //     .catch(error => console.log(error));
+  // }
   function handleGroupWishlistOpen() {
     setWishlist(true);
     // fetchGroupwishlist();
@@ -217,7 +211,7 @@ function Chat() {
             }`}
           >
             <span className="chat__name">{message.name}</span>
-            {message.message[1] != "" ? (
+            {message.message[1] !== "" ? (
               <Card className={classes.root}>
                 <CardActionArea>
                   <CardMedia
@@ -241,7 +235,7 @@ function Chat() {
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
-                  <Button size="small" color="primary">
+                  <Button size="small" color="secondary">
                     View this item
                   </Button>
                 </CardActions>
@@ -257,7 +251,6 @@ function Chat() {
         ))}{" "}
       </div>
       <div className="chat__footer">
-        <InsertEmoticonIcon />
         <form>
           <input
             value={input}
@@ -269,7 +262,6 @@ function Chat() {
           />
           <button onClick={sendMessage}>Send a message</button>
         </form>
-        <MicIcon />
       </div>
     </div>
   );
