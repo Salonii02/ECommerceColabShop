@@ -166,7 +166,6 @@ function Sidebar() {
     //   });
   }
   function fetchUsers() {
-    console.log("This is sidebarfetchuser");
     const allUsers = [];
     db.collection("user")
       .get()

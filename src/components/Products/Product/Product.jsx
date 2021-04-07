@@ -7,7 +7,6 @@ import {
   Typography
 } from "@material-ui/core";
 import { Button } from "@material-ui/core";
-import { getLinkPreview, getPreviewFromContent } from 'link-preview-js';
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import useStyles from "./styles";
 import { useStateValue } from "../../../StateProvider";
@@ -18,7 +17,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import ShareIcon from '@material-ui/icons/Share';
+import ShareIcon from "@material-ui/icons/Share";
 import firebase from "firebase";
 import TextField from "@material-ui/core/TextField";
 function Product({ product }) {
@@ -26,14 +25,14 @@ function Product({ product }) {
   const [{ user }, dispatch] = useStateValue();
   const [openWishlist, setWishlist] = useState(false);
   const [openShare, setopenShare] = useState(false);
-   const [input, setinput] = useState("");
+  const [input, setinput] = useState("");
   const [groupList, setGroupList] = useState([]);
   const handleShareOpen = () => setopenShare(true);
   const handleShareClose = () => setopenShare(false);
   const handleOpenWishlist = () => setWishlist(true);
   const handleCloseWishlist = () => setWishlist(false);
   function fetchGroups() {
-   // console.log("Aditi");
+    // console.log("Aditi");
     const allGroups = [];
     db.collection("group")
       .where("members", "array-contains", user.uid)
@@ -46,21 +45,19 @@ function Product({ product }) {
       });
     return allGroups;
   }
-  function shareChat(){
+  function shareChat() {
     groupList.forEach(group => {
-      // getLinkPreview(product.image)
-      // .then((data) => console.debug(data));
-    db.collection("messages")
-      .doc(group.id)
-      .collection("message")
-      .add({
-        name: user.displayName,
-        message: [input,product.id],
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      })
-       .then()
-      .catch();
-    })
+      db.collection("messages")
+        .doc(group.id)
+        .collection("message")
+        .add({
+          name: user.displayName,
+          message: [input, product.img, product.title],
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then()
+        .catch();
+    });
   }
   function addGroupWishlist() {
     groupList.forEach(group => {
@@ -164,17 +161,17 @@ function Product({ product }) {
             />
           </DialogContent>
           <TextField
-                autoFocus
-                margin="dense"
-                id="suggestion"
-                label="Add suggestions"
-                type="suggestions"
-                value={input}
-                onChange={event => {
-                  setinput(event.target.value);
-                }}
-                fullWidth
-              />
+            autoFocus
+            margin="dense"
+            id="suggestion"
+            label="Add suggestions"
+            type="suggestions"
+            value={input}
+            onChange={event => {
+              setinput(event.target.value);
+            }}
+            fullWidth
+          />
           <DialogActions>
             <Button onClick={shareChat} color="primary">
               Share it in your groups

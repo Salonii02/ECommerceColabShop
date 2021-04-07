@@ -20,7 +20,7 @@ function App() {
   const [intermediate, setintermediate] = useState(false);
   const [products, setProducts] = useState([]);
 
- const fetchProducts = () => {
+  const fetchProducts = () => {
     fetch("https://fakestoreapi.com/products")
       .then(res => res.json())
       .then(json => {
