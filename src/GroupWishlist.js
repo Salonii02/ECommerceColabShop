@@ -1,20 +1,47 @@
-import { React, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Button } from "@material-ui/core";
-import db from "./firebase";
-import history from "./history";
-function GroupWishlist() {
-  const { roomId } = useParams();
-
-  function handleClick() {
-    history.push(`/rooms/${roomId}`);
+import React from "react";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  CardActionArea,
+  Typography,
+  Button
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 200,
+    height: 300
+  },
+  media: {
+    height: 100
   }
-
+});
+const GroupWishlist = ({ item }) => {
+  const classes = useStyles();
   return (
-    <button type="button" onClick={handleClick}>
-      Go Back
-    </button>
+    <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image={item.img}
+          title={item.title}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h8">
+            {/* {message.message[0]} */}
+            {item.title}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="secondary">
+          View this item
+        </Button>
+      </CardActions>
+    </Card>
   );
-}
+};
 
 export default GroupWishlist;

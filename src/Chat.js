@@ -21,31 +21,39 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useStateValue } from "./StateProvider";
 import firebase from "firebase";
 import Product from "./components/Products/Product/Product";
-import { Group } from "@material-ui/icons";
+import { Group, SettingsRemoteSharp } from "@material-ui/icons";
 import GroupWishlist from "./GroupWishlist";
-import { useHistory } from "react-router-dom";
+import { Grid } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345
+    maxWidth: 200
   },
   media: {
     height: 140
   }
 });
 function Chat() {
-  const history = useHistory();
   const classes = useStyles();
   const [input, setInput] = useState("");
   const { roomId } = useParams();
-  const [item, setitem] = useState([]);
+  const [items, setitems] = useState([]);
   const [roomName, setRoomName] = useState("");
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
-  const [selectWishlist, setWishlist] = useState(false);
+  // //const [displayWishList, setdisplayWishlist] = useState(false);
+  const [wishlistgroup, setwishlistgroup] = useState([]);
+  const [Wishlist, setWishlist] = useState(false);
+
+  ////const handleGroupWishlistOpen = () => setdisplayWishlist(true);
+  const handleGroupWishlistClose = () => setWishlist(false);
   useEffect(() => {
-    if (roomId && !selectWishlist) {
+    if (roomId) {
       console.log("chat.js");
-      console.log(selectWishlist);
       console.log(roomId);
       db.collection("group")
         .doc(roomId)
@@ -68,6 +76,28 @@ function Chat() {
           setMessages(snapshot.docs.map(doc => doc.data()));
           console.log("Messages Here", messages);
         });
+      let wishlist = [];
+      db.collection("group")
+        .doc(roomId)
+        .get()
+        .then(doc => {
+          wishlist = doc.data().wishlist;
+          console.log("Wishlist", wishlist);
+          let tempItems = [];
+          wishlist.forEach(itemid => {
+            db.collection("Items")
+              .doc(itemid)
+              .get()
+              .then(doc => {
+                tempItems.push(doc.data());
+                console.log("EachtempItem", doc.data());
+              })
+              .catch(error => console.log(error));
+          });
+          console.log("saloni", tempItems);
+          setitems(tempItems);
+        })
+        .catch(error => console.log(error));
       // if(messages){
       // console.log(mess);
       // let i=0;
@@ -89,7 +119,7 @@ function Chat() {
       // console.log(item);
       // }
     }
-  }, [roomId, selectWishlist]);
+  }, [roomId]);
   const sendMessage = e => {
     e.preventDefault();
     db.collection("messages")
@@ -104,12 +134,6 @@ function Chat() {
       .catch();
     setInput("");
   };
-  function showGroupWishlist() {
-    setWishlist(true);
-    console.log("selctWishlist", selectWishlist);
-    // history.push(`/rooms/${roomId}/wishlist`);
-    // return <GroupWishlist />;
-  }
   function fetchGroupwishlist() {
     let wishlist = [];
     db.collection("group")
@@ -117,107 +141,137 @@ function Chat() {
       .get()
       .then(doc => {
         wishlist = doc.data().wishlist;
-        console.log(wishlist);
+        console.log("Wishlist", wishlist);
+        //  setwishlistgroup(wishlist);
+        //  console.log(wishlistgroup);
+        let tempItems = [];
+        wishlist.forEach(itemid => {
+          db.collection("Items")
+            .doc(itemid)
+            .get()
+            .then(doc => {
+              tempItems.push(doc.data());
+              console.log("tempItems", doc.data());
+            })
+            .catch(error => console.log(error));
+        });
+        console.log("saloni", tempItems);
+        setitems(tempItems);
       })
       .catch(error => console.log(error));
-    return wishlist;
+  }
+  function handleGroupWishlistOpen() {
+    setWishlist(true);
+    // fetchGroupwishlist();
   }
   return (
-    <>
-      {selectWishlist ? (
-        <GroupWishlist
-          selectWishlist={selectWishlist}
-          wishlistitems={fetchGroupwishlist()}
-        />
-      ) : (
-        //<>
-        <div className="chat">
-          <div className="chat__header">
-            <Avatar />
-            <div className="chat__headerInfo">
-              <h3>{roomName}</h3>
-            </div>
-            <div className="chat__headerRight">
-              <Button onClick={showGroupWishlist}>
-                <FavoriteBorderOutlinedIcon
-                  style={{ color: "#ab003c" }}
-                  fontSize="large"
-                />
-              </Button>
-
-              <IconButton>
-                <PollOutlinedIcon
-                  style={{ color: "#ab003c" }}
-                  fontSize="large"
-                />
-              </IconButton>
-            </div>
-          </div>
-          <div className="chat__body">
-            {messages.map(message => (
-              <p
-                className={`chat__message ${
-                  user.displayName === message.name && "chat__receiver"
-                }`}
-              >
-                <span className="chat__name">{message.name}</span>
-                {message.message[1] != "" ? (
-                  <Card className={classes.root}>
-                    <CardActionArea>
-                      <CardMedia
-                        className={classes.media}
-                        image={message.message[1]}
-                        title={message.message[2]}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {message.message[0]}
-                        </Typography>
-                        {
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {message.message[2]}
-                          </Typography>
-                        }
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        View this item
-                      </Button>
-                    </CardActions>
-                  </Card>
-                ) : (
-                  <div>{message.message[0]}</div>
-                )}
-                <span className="chat__timestamp">
-                  {new Date(message.timestamp?.toDate()).toUTCString()}
-                </span>
-                {/* <h1>{user.name}</h1> */}
-              </p>
-            ))}{" "}
-          </div>
-          <div className="chat__footer">
-            <InsertEmoticonIcon />
-            <form>
-              <input
-                value={input}
-                onChange={e => {
-                  setInput(e.target.value);
-                }}
-                placeholder="Type a message"
-                type="text"
-              />
-              <button onClick={sendMessage}>Send a message</button>
-            </form>
-            <MicIcon />
-          </div>
+    <div className="chat">
+      <div className="chat__header">
+        <Avatar />
+        <div className="chat__headerInfo">
+          <h3>{roomName}</h3>
         </div>
-      )}
-    </>
+        <div className="chat__headerRight">
+          <Button onClick={handleGroupWishlistOpen}>
+            <FavoriteBorderOutlinedIcon
+              style={{ color: "#ab003c" }}
+              fontSize="large"
+            />
+          </Button>
+          <Dialog
+            open={Wishlist}
+            onClose={handleGroupWishlistClose}
+            fullWidth
+            maxWidth="sm"
+            fullHeight
+            maxHeight="sm"
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Your GroupWishlist</DialogTitle>
+            <DialogContent>
+              <Grid container justify="center" spacing={4}>
+                {items.map(item => (
+                  <Grid item key={item.id} xs={12} sm={6}>
+                    <GroupWishlist item={item} />
+                  </Grid>
+                ))}
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleGroupWishlistClose} color="secondary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <IconButton>
+            <PollOutlinedIcon style={{ color: "#ab003c" }} fontSize="large" />
+          </IconButton>
+        </div>
+      </div>
+      <div className="chat__body">
+        {messages.map(message => (
+          <p
+            className={`chat__message ${
+              user.displayName === message.name && "chat__receiver"
+            }`}
+          >
+            <span className="chat__name">{message.name}</span>
+            {message.message[1] != "" ? (
+              <Card className={classes.root}>
+                <CardActionArea>
+                  <CardMedia
+                    className={classes.media}
+                    image={message.message[1]}
+                    title={message.message[2]}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {message.message[0]}
+                    </Typography>
+                    {
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {message.message[2]}
+                      </Typography>
+                    }
+                  </CardContent>
+                </CardActionArea>
+                <CardActions>
+                  <Button size="small" color="primary">
+                    View this item
+                  </Button>
+                </CardActions>
+              </Card>
+            ) : (
+              <div>{message.message[0]}</div>
+            )}
+            <span className="chat__timestamp">
+              {new Date(message.timestamp?.toDate()).toUTCString()}
+            </span>
+            {/* <h1>{user.name}</h1> */}
+          </p>
+        ))}{" "}
+      </div>
+      <div className="chat__footer">
+        <InsertEmoticonIcon />
+        <form>
+          <input
+            value={input}
+            onChange={e => {
+              setInput(e.target.value);
+            }}
+            placeholder="Type a message"
+            type="text"
+          />
+          <button onClick={sendMessage}>Send a message</button>
+        </form>
+        <MicIcon />
+      </div>
+    </div>
   );
 }
 

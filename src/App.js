@@ -12,7 +12,6 @@ import NavBar from "./components/NavBar/NavBar";
 import Products from "./components/Products/Products";
 import db from "./firebase";
 import GroupWishlist from "./GroupWishlist";
-import history from "./history";
 function App() {
   const [{ user }, dispatch] = useStateValue();
   const [loggedIn, setloggedIn] = useState(false);
@@ -104,15 +103,10 @@ function App() {
             {products ? <Products products={products} /> : null}
           </div>
           <div className="app__body">
-            <Router history={history}>
+            <Router>
               <SideBar />
               <Switch>
                 <Route exact path="/rooms/:roomId" component={Chat}></Route>
-                <Route
-                  exact
-                  path="/rooms/:roomId/wishlist"
-                  component={GroupWishlist}
-                ></Route>
               </Switch>
             </Router>
           </div>

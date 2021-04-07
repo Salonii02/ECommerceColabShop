@@ -210,7 +210,7 @@ function Sidebar() {
             onClose={handlePrivateClose}
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+            <DialogTitle id="form-dialog-title">Private</DialogTitle>
             <DialogContent>
               <DialogContentText>
                 please enter your email address here.
@@ -227,12 +227,12 @@ function Sidebar() {
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={addPrivateChat} color="primary">
+              <Button onClick={addPrivateChat} color="secondary">
                 Add Friend
               </Button>
             </DialogActions>
             <DialogActions>
-              <Button onClick={handlePrivateClose} color="primary">
+              <Button onClick={handlePrivateClose} color="secondary">
                 Cancel
               </Button>
             </DialogActions>
@@ -249,7 +249,7 @@ function Sidebar() {
             maxHeight="sm"
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+            <DialogTitle id="form-dialog-title">Add Group</DialogTitle>
             <DialogContent>
               <DialogContentText>Add new group name</DialogContentText>
               <TextField
