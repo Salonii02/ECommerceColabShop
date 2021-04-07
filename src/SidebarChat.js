@@ -3,7 +3,7 @@ import "./SidebarChat.css";
 import { Avatar } from "@material-ui/core";
 import db from "./firebase";
 import { Link } from "react-router-dom";
-import {useStateValue} from './StateProvider';
+import { useStateValue } from "./StateProvider";
 // import { userId } from "./Login";
 import Login from "./Login";
 // import {Avatar,IconButton} from '@material-ui/core';
@@ -25,30 +25,15 @@ function SidebarChat({ id, name, addNewChat }) {
     }
   }, [id]);
 
-  const createChat = () => {
-    const roomName = prompt("Please enter name for chat room");
-
-    if (roomName) {
-      db.collection("users").doc(user.uid).collection("rooms").add({
-        name: roomName
-      });
-    }
-  };
-
-  return !addNewChat ? (
+  return (
     <Link to={`/rooms/${id}`}>
       <div className="sidebarChat">
         <Avatar />
         <div className="sidebarChat__info">
           <h2>{name}</h2>
-          <p>{messages[0]?.message}</p>
         </div>
       </div>
     </Link>
-  ) : (
-    <div onClick={createChat} className="sidebarChat">
-      <h2>Add new Chat</h2>
-    </div>
   );
 }
 

@@ -8,6 +8,7 @@ import {
   CardActionArea,
   Typography
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { Avatar, IconButton, Input } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
@@ -22,6 +23,7 @@ import firebase from "firebase";
 import Product from "./components/Products/Product/Product";
 import { Group } from "@material-ui/icons";
 import GroupWishlist from "./GroupWishlist";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     maxWidth: 345
@@ -31,6 +33,7 @@ const useStyles = makeStyles({
   }
 });
 function Chat() {
+  const history = useHistory();
   const classes = useStyles();
   const [input, setInput] = useState("");
   const { roomId } = useParams();
@@ -104,9 +107,11 @@ function Chat() {
   function showGroupWishlist() {
     setWishlist(true);
     console.log("selctWishlist", selectWishlist);
+    // history.push(`/rooms/${roomId}/wishlist`);
+    // return <GroupWishlist />;
   }
   function fetchGroupwishlist() {
-    const wishlist = [];
+    let wishlist = [];
     db.collection("group")
       .doc(roomId)
       .get()
@@ -139,6 +144,7 @@ function Chat() {
                   fontSize="large"
                 />
               </Button>
+
               <IconButton>
                 <PollOutlinedIcon
                   style={{ color: "#ab003c" }}

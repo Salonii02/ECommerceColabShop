@@ -1,16 +1,20 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import Chat from "./Chat";
-const GroupWishlist = ({ selectWishlist }) => {
+import db from "./firebase";
+import history from "./history";
+function GroupWishlist() {
+  const { roomId } = useParams();
+
+  function handleClick() {
+    history.push(`/rooms/${roomId}`);
+  }
+
   return (
-    <Button
-      onClick={() => {
-        <Chat back={true} />;
-      }}
-    >
-      back
-    </Button>
+    <button type="button" onClick={handleClick}>
+      Go Back
+    </button>
   );
-};
+}
 
 export default GroupWishlist;

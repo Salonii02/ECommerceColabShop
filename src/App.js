@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Link } from "react-router-dom";
 import SideBar from "./Sidebar.js";
 import Chat from "./Chat.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -12,12 +11,11 @@ import { actionTypes } from "./reducer";
 import NavBar from "./components/NavBar/NavBar";
 import Products from "./components/Products/Products";
 import db from "./firebase";
-
+import GroupWishlist from "./GroupWishlist";
+import history from "./history";
 function App() {
   const [{ user }, dispatch] = useStateValue();
-  const [userId, setuserId] = useState("");
   const [loggedIn, setloggedIn] = useState(false);
-  const [intermediate, setintermediate] = useState(false);
   const [products, setProducts] = useState([]);
 
   const fetchProducts = () => {
@@ -106,12 +104,15 @@ function App() {
             {products ? <Products products={products} /> : null}
           </div>
           <div className="app__body">
-            <Router>
+            <Router history={history}>
               <SideBar />
               <Switch>
-                <Route path="/rooms/:roomId">
-                  <Chat key={userId} />
-                </Route>
+                <Route exact path="/rooms/:roomId" component={Chat}></Route>
+                <Route
+                  exact
+                  path="/rooms/:roomId/wishlist"
+                  component={GroupWishlist}
+                ></Route>
               </Switch>
             </Router>
           </div>
