@@ -162,6 +162,7 @@ function Product({ product }) {
           </DialogContent>
           <TextField
             autoFocus
+            
             margin="dense"
             id="suggestion"
             label="Add suggestions"
@@ -170,7 +171,7 @@ function Product({ product }) {
             onChange={event => {
               setinput(event.target.value);
             }}
-            fullWidth
+            
           />
           <DialogActions>
             <Button onClick={shareChat} color="primary">

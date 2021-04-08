@@ -1,13 +1,15 @@
 import React from "react";
 import ToolBar from "@material-ui/core/Toolbar";
 import { AppBar, IconButton, Badge, Typography } from "@material-ui/core";
-import { ShoppingCart } from "@material-ui/icons";
 import useStyles from "./styles";
-
-const NavBar = () => {
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
+import './NavBar.css';
+function NavBar(){
   const classes = useStyles();
   return (
-    <div>
+    <div className="navbar">
       <AppBar position="fixed" className={classes.appBar} color="inherit">
         <ToolBar>
           <Typography variant="h6" className={classes.title} color="inherit">
@@ -22,11 +24,17 @@ const NavBar = () => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.button}>
-            <IconButton aria-label="Show cart items" color="inherit">
-              <Badge badgeContent={2} color="secondary">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
+              <div classes="icons__right">
+                <IconButton>
+              <PersonOutlineIcon color="secondary"/>
+              </IconButton>
+              <IconButton>
+              <FavoriteBorderIcon color="secondary"/>
+              </IconButton>
+              <IconButton>
+                <LocalMallIcon color="secondary"/>
+                </IconButton>
+            </div>
           </div>
         </ToolBar>
       </AppBar>

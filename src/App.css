@@ -9,17 +9,16 @@
 
 .app__body{
   display: flex;
-  /* position:fixed; */
-  /* flex: 1; */
+
   background-color: #ededed;
   margin-top: -50px;
   height:90vh;
   width:40vw;
   position: -webkit-sticky; 
-position: sticky;
-top: 0;
-z-index: 1;
-padding-top: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-top: 80px;
 
   /* position: -webkit-sticky;
   position: sticky; */

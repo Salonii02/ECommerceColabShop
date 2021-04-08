@@ -8,7 +8,7 @@ import { Button } from "@material-ui/core";
 import { auth, provider } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import { actionTypes } from "./reducer";
-import NavBar from "./components/NavBar/NavBar";
+import NavBar from "./components/NavBar/NavBar.js";
 import Products from "./components/Products/Products";
 import db from "./firebase";
 function App() {
@@ -17,6 +17,7 @@ function App() {
   const [products, setProducts] = useState([]);
 
   const fetchProducts = () => {
+    
     let Newproducts = [];
     db.collection("Items")
       .get()

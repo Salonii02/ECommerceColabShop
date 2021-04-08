@@ -159,7 +159,8 @@ function Chat() {
     // fetchGroupwishlist();
   }
   return (
-    <div className="chat">
+    <div className="chat"> 
+       
       <div className="chat__header">
         <Avatar />
         <div className="chat__headerInfo">
@@ -169,7 +170,7 @@ function Chat() {
           <Button onClick={handleGroupWishlistOpen}>
             <FavoriteBorderOutlinedIcon
               style={{ color: "#ab003c" }}
-              fontSize="large"
+              fontSize="medium"
             />
           </Button>
           <Dialog
@@ -199,7 +200,7 @@ function Chat() {
           </Dialog>
 
           <IconButton>
-            <PollOutlinedIcon style={{ color: "#ab003c" }} fontSize="large" />
+            <PollOutlinedIcon style={{ color: "#ab003c" }} fontSize="medium" />
           </IconButton>
         </div>
       </div>
