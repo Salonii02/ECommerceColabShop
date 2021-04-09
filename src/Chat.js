@@ -76,7 +76,7 @@ function Chat() {
         .get()
         .then(doc => {
           wishlist = doc.data().wishlist;
-          console.log("Wishlist", wishlist);
+          //console.log("Wishlist", wishlist);
           let tempItems = [];
           wishlist.forEach(itemid => {
             db.collection("Items")
@@ -88,7 +88,7 @@ function Chat() {
               })
               .catch(error => console.log(error));
           });
-          console.log("saloni", tempItems);
+          //console.log("saloni", tempItems);
           setitems(tempItems);
         })
         .catch(error => console.log(error));
@@ -159,8 +159,7 @@ function Chat() {
     // fetchGroupwishlist();
   }
   return (
-    <div className="chat"> 
-       
+    <div className="chat">
       <div className="chat__header">
         <Avatar />
         <div className="chat__headerInfo">

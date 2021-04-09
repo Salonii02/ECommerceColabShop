@@ -16,37 +16,57 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import ErrorBoundary from "./ErrorBoundary";
 
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
   const [{ user }] = useStateValue();
-  //const [messages, setMessages] = useState("");
+  //const [messages, setMessages] = useState("");;
   const [addPrivate, setPrivate] = useState(false);
   const [addGroup, setGroup] = useState(false);
-  const [selectedUser, setselectedUser] = useState([]);
+  const [selectedUser, setselectedUser] = useState("");
   const [newGroupMembers, setnewGroupMembers] = useState([]);
   const [newGroupName, setnewGroupName] = useState([]);
   const handlePrivateClose = () => setPrivate(false);
   const handlePrivateOpen = () => setPrivate(true);
   const handleGroupOpen = () => setGroup(true);
   const handleGroupClose = () => setGroup(false);
-
+  const [allUsers, setUsers] = useState([]);
+  useEffect(() => {
+    const all = [];
+    db.collection("user")
+      .get()
+      .then(querySnapShot => {
+        querySnapShot.forEach(doc => {
+          const tempuser = doc.data();
+          if (tempuser.uid != user.uid) all.push(tempuser);
+        });
+      })
+      .catch(error => {
+        alert(error);
+      });
+    console.log(all);
+    setUsers(all);
+    console.log(allUsers);
+  }, []);
   function addGroupByUserID(groupid, users) {
     var i = 0;
-    for (i = 0; i < users.length; i++) {
+    console.log("Add Group by userId");
+    console.log(users);
+    users.push(user.uid);
+    users.forEach(userhere => {
       db.collection("user")
-        .doc(users[i])
+        .doc(userhere.uid)
         .update({
           groups: firebase.firestore.FieldValue.arrayUnion(groupid)
-          //  emailid: data.emailid
         })
         .then(() => {
-          console.log("s");
+          console.log("sucessfully added your group");
         })
         .catch(err => {
           console.log(err);
         });
-    }
+    });
   }
 
   function addnewGroup() {
@@ -80,41 +100,13 @@ function Sidebar() {
         //now add this group in the database of its members
         //user -> group
 
-        addGroupByUserID(group.id, newGroupMembers.push(user.uid));
+        addGroupByUserID(group.id, newGroupMembers);
 
         //resolve(group)
       })
       .catch(function (error) {
         console.log(error);
       });
-    // db.collection("group")
-    // .where("members", "array-contains", user.uid)
-    // .get()
-    // .then(querySnapshot => {
-    //   setRooms(
-    //     querySnapshot.docs.map(doc => ({
-    //       id: doc.id,
-    //       data: doc.data()
-    //     }))
-    //   );
-    // })
-    // .catch(error => {
-    //   console.log("Error getting documents: ", error);
-    // });
-    // // db.collection("group")
-    //   .where("members", "array-contains", user.uid)
-    //   .get()
-    //   .then(querySnapshot => {
-    //     setRooms(
-    //       querySnapshot.docs.map(doc => ({
-    //         id: doc.id,
-    //         data: doc.data()
-    //       }))
-    //     );
-    //   })
-    //   .catch(error => {
-    //     console.log("Error getting documents: ", error);
-    //   });
   }
   function addPrivateChat() {
     const group = {
@@ -171,8 +163,8 @@ function Sidebar() {
       .get()
       .then(querySnapShot => {
         querySnapShot.forEach(doc => {
-          const user = doc.data();
-          allUsers.push(user);
+          const tempuser = doc.data();
+          if (tempuser.uid != user.uid) allUsers.push(tempuser);
         });
       })
       .catch(error => {
@@ -184,7 +176,7 @@ function Sidebar() {
 
   useEffect(() => {
     // db.collection('user').doc(user.uid).get()
-    console.log("saloni");
+    // console.log("saloni");
     db.collection("group")
       .where("members", "array-contains", user.uid)
       .onSnapshot(querySnapshot => {
@@ -215,16 +207,23 @@ function Sidebar() {
               <DialogContentText>
                 please enter your email address here.
               </DialogContentText>
-              <Autocomplete
-                id="combo-box-demo"
-                options={fetchUsers()}
-                onChange={(event, value) => setselectedUser(value)}
-                getOptionLabel={option => option.emailid}
-                style={{ width: 300 }}
-                renderInput={params => (
-                  <TextField {...params} label="Combo box" variant="outlined" />
-                )}
-              />
+              <ErrorBoundary>
+                <Autocomplete
+                  id="combo-box-demo"
+                  options={allUsers}
+                  onChange={(event, value) => setselectedUser(value)}
+                  getOptionLabel={option => option.emailid}
+                  style={{ width: 300 }}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      label="Combo box"
+                      variant="outlined"
+                      onChange={(event, value) => setselectedUser(value)}
+                    />
+                  )}
+                />
+              </ErrorBoundary>
             </DialogContent>
             <DialogActions>
               <Button onClick={addPrivateChat} color="secondary">
@@ -266,7 +265,7 @@ function Sidebar() {
               />
               <DialogContentText>Add members</DialogContentText>
               <Multiselect
-                options={fetchUsers()}
+                options={allUsers}
                 displayValue="emailid"
                 onSelect={(selectedList, selectedItem) => {
                   setnewGroupMembers(selectedList);

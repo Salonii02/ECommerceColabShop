@@ -11,13 +11,14 @@ import { actionTypes } from "./reducer";
 import NavBar from "./components/NavBar/NavBar.js";
 import Products from "./components/Products/Products";
 import db from "./firebase";
+import logo from "./images/ColabShop.png";
+import ErrorBoundary from "./ErrorBoundary";
 function App() {
   const [{ user }, dispatch] = useStateValue();
   const [loggedIn, setloggedIn] = useState(false);
   const [products, setProducts] = useState([]);
 
   const fetchProducts = () => {
-    
     let Newproducts = [];
     db.collection("Items")
       .get()
@@ -76,10 +77,7 @@ function App() {
       {!loggedIn ? (
         <div className="login">
           <div className="login_container">
-            <img
-              src="https://cdn.freelogovectors.net/wp-content/uploads/2020/02/myntra-logo-768x768.png"
-              alt=""
-            />
+            <img src={logo} alt="" />
             <div className="login_text">
               <h1>Sign in to ColabShop</h1>
             </div>
@@ -96,7 +94,9 @@ function App() {
           </div>
           <div className="app__body">
             <Router>
-              <SideBar />
+              <ErrorBoundary>
+                <SideBar />
+              </ErrorBoundary>
               <Switch>
                 <Route exact path="/rooms/:roomId" component={Chat}></Route>
               </Switch>
