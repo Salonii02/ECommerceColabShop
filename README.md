@@ -1,19 +1,3 @@
-
-<<<<<<< HEAD
-<p style="color: red; font-weight: bold">>>>>>  gd2md-html alert:  ERRORs: 0; WARNINGs: 0; ALERTS: 7.</p>
-<ul style="color: red; font-weight: bold"><li>See top comment block for details on ERRORs and WARNINGs. <li>In the converted Markdown or HTML, search for inline alerts that start with >>>>>  gd2md-html alert:  for specific instances that need correction.</ul>
-
-<p style="color: red; font-weight: bold">Links to alert messages:</p><a href="#gdcalert1">alert1</a>
-<a href="#gdcalert2">alert2</a>
-<a href="#gdcalert3">alert3</a>
-<a href="#gdcalert4">alert4</a>
-<a href="#gdcalert5">alert5</a>
-<a href="#gdcalert6">alert6</a>
-<a href="#gdcalert7">alert7</a>
-
-<p style="color: red; font-weight: bold">>>>>> PLEASE check and correct alert issues and delete this message and the inline alerts.<hr></p>
-
-
 With “**ColabShop**” we aim to **stimulate** this participation of peers, bringing in new features providing a **collaborative shopping experience** with your family or friends.
 
 With ColabShop, the main screen is divided into 3:1 ratio: inventory items and other chat box thereby making it easy to surf options as well as chat. This particular side chat would be associated with one or more groups, one can add people you want to shop together within the group.
@@ -116,5 +100,3 @@ Private Wishlist
 1. [Cloud Firestore | Firebase](https://firebase.google.com/docs/firestore)
 2. [Components](https://material.io/components)
 3. [Get realtime updates with Cloud Firestore | Firebase](https://firebase.google.com/docs/firestore/query-data/listen)
-=======
->>>>>>> bec13aa027f73e5d49ab3a4db78d0b03094cbcc7
