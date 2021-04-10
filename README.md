@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 <p style="color: red; font-weight: bold">>>>>>  gd2md-html alert:  ERRORs: 0; WARNINGs: 0; ALERTS: 7.</p>
 <ul style="color: red; font-weight: bold"><li>See top comment block for details on ERRORs and WARNINGs. <li>In the converted Markdown or HTML, search for inline alerts that start with >>>>>  gd2md-html alert:  for specific instances that need correction.</ul>
 
@@ -115,3 +116,5 @@ Private Wishlist
 1. [Cloud Firestore | Firebase](https://firebase.google.com/docs/firestore)
 2. [Components](https://material.io/components)
 3. [Get realtime updates with Cloud Firestore | Firebase](https://firebase.google.com/docs/firestore/query-data/listen)
+=======
+>>>>>>> bec13aa027f73e5d49ab3a4db78d0b03094cbcc7
