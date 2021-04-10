@@ -88,7 +88,7 @@ function Chat() {
               })
               .catch(error => console.log(error));
           });
-          //console.log("saloni", tempItems);
+          console.log("saloni", tempItems);
           setitems(tempItems);
         })
         .catch(error => console.log(error));
@@ -177,7 +177,7 @@ function Chat() {
             onClose={handleGroupWishlistClose}
             fullWidth
             maxWidth="sm"
-            fullHeight
+            fullheight
             maxHeight="sm"
             aria-labelledby="form-dialog-title"
           >

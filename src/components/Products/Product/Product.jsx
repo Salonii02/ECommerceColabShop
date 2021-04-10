@@ -90,10 +90,10 @@ function Product({ product }) {
       />
       <CardContent>
         <div className={classes.cardContent}>
-          <Typography variant="subtitle2" gutterBottom>
+          <Typography variant="subtitle1" gutterBottom>
             {product.title}
           </Typography>
-          <Typography variant="subtitle2">{product.price}</Typography>
+          <Typography variant="subtitle1">{`Rs ${product.price}`}</Typography>
         </div>
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
@@ -109,7 +109,7 @@ function Product({ product }) {
           onClose={handleCloseWishlist}
           fullWidth
           maxWidth="sm"
-          fullHeight
+          fullheight
           maxHeight="sm"
           aria-labelledby="form-dialog-title"
         >
@@ -125,17 +125,17 @@ function Product({ product }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={addGroupWishlist} color="primary">
+            <Button onClick={addGroupWishlist} color="secondary">
               Add to your chat wishlist
             </Button>
           </DialogActions>
           <DialogActions>
-            <Button onClick={addPrivateWishlist} color="primary">
+            <Button onClick={addPrivateWishlist} color="secondary">
               Add to your private wishlist
             </Button>
           </DialogActions>
           <DialogActions>
-            <Button onClick={handleCloseWishlist} color="primary">
+            <Button onClick={handleCloseWishlist} color="secondary">
               Cancel
             </Button>
           </DialogActions>
@@ -162,7 +162,6 @@ function Product({ product }) {
           </DialogContent>
           <TextField
             autoFocus
-            
             margin="dense"
             id="suggestion"
             label="Add suggestions"
@@ -171,15 +170,14 @@ function Product({ product }) {
             onChange={event => {
               setinput(event.target.value);
             }}
-            
           />
           <DialogActions>
-            <Button onClick={shareChat} color="primary">
+            <Button onClick={shareChat} color="secondary">
               Share it in your groups
             </Button>
           </DialogActions>
           <DialogActions>
-            <Button onClick={handleShareClose} color="primary">
+            <Button onClick={handleShareClose} color="secondaty">
               Cancel
             </Button>
           </DialogActions>

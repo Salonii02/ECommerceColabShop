@@ -39,7 +39,7 @@ function Sidebar() {
       .then(querySnapShot => {
         querySnapShot.forEach(doc => {
           const tempuser = doc.data();
-          if (tempuser.uid != user.uid) all.push(tempuser);
+          if (tempuser.uid && tempuser.uid !== user.uid) all.push(tempuser);
         });
       })
       .catch(error => {
@@ -53,7 +53,8 @@ function Sidebar() {
     var i = 0;
     console.log("Add Group by userId");
     console.log(users);
-    users.push(user.uid);
+    users.push(user);
+    console.log(user);
     users.forEach(userhere => {
       db.collection("user")
         .doc(userhere.uid)
