@@ -92,9 +92,9 @@ Private Wishlist
 
 **Contributors :**
 
-1.[![](https://avatars.githubusercontent.com/u/41864816?v=4)](https://github.com/Aditi1709)
+1.[![](https://avatars.githubusercontent.com/u/41864816?size=50)](https://github.com/Aditi1709)
 
-2.[![](https://avatars.githubusercontent.com/u/61061499?v=4)](https://github.com/Salonii02)
+2.[![](https://avatars.githubusercontent.com/u/61061499?size=50)](https://github.com/Salonii02)
 
 **References :**
 
