@@ -1,3 +1,6 @@
+**COLLABORATIVE SHOPPING FOR E-COMMERCE**
+
+
 With “**ColabShop**” we aim to **stimulate** this participation of peers, bringing in new features providing a **collaborative shopping experience** with your family or friends.
 
 With ColabShop, the main screen is divided into 3:1 ratio: inventory items and other chat box thereby making it easy to surf options as well as chat. This particular side chat would be associated with one or more groups, one can add people you want to shop together within the group.
@@ -29,7 +32,7 @@ Backend: Firebase
 **Firebase:**
 
 
-    Firebase is a Backend-as-a-Service (Baas). It help in the easy storing and retrieval of dynamic content.
+   * Firebase is a Backend-as-a-Service (Baas). It help in the easy storing and retrieval of dynamic content.
 
 
 1.Sign in :
@@ -89,9 +92,9 @@ Private Wishlist
 
 **Contributors :**
 
-1.Aditi1709
+1.@Aditi1709
 
-2.Salonii02
+2.@Salonii02
 
 **References :**
 
