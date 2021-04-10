@@ -1,70 +1,117 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p style="color: red; font-weight: bold">>>>>>  gd2md-html alert:  ERRORs: 0; WARNINGs: 0; ALERTS: 7.</p>
+<ul style="color: red; font-weight: bold"><li>See top comment block for details on ERRORs and WARNINGs. <li>In the converted Markdown or HTML, search for inline alerts that start with >>>>>  gd2md-html alert:  for specific instances that need correction.</ul>
 
-## Available Scripts
+<p style="color: red; font-weight: bold">Links to alert messages:</p><a href="#gdcalert1">alert1</a>
+<a href="#gdcalert2">alert2</a>
+<a href="#gdcalert3">alert3</a>
+<a href="#gdcalert4">alert4</a>
+<a href="#gdcalert5">alert5</a>
+<a href="#gdcalert6">alert6</a>
+<a href="#gdcalert7">alert7</a>
 
-In the project directory, you can run:
+<p style="color: red; font-weight: bold">>>>>> PLEASE check and correct alert issues and delete this message and the inline alerts.<hr></p>
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+With “**ColabShop**” we aim to **stimulate** this participation of peers, bringing in new features providing a **collaborative shopping experience** with your family or friends.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+With ColabShop, the main screen is divided into 3:1 ratio: inventory items and other chat box thereby making it easy to surf options as well as chat. This particular side chat would be associated with one or more groups, one can add people you want to shop together within the group.
 
-### `npm test`
+**Languages used:**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Frontend : Reactjs
 
-### `npm run build`
+Backend: Firebase
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**FrontEnd:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+*   Login Page : To sign into ColabShop Google Email authentication is integrated.
+*   Products
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    This component contains a set of various items to be shared and discussed among friends and family.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    *   Add to Wishlist: This button adds the current product to any particular group wishlist and your private wishlist.
+        *   GroupWishlist
+        *   PrivateWishlist
+    *   Share in your groups: This button helps to recommend and discuss
+        *   Preview the item shared on the group
+*   Chatbox
+    *   GroupChat
+    *   PrivateChat
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**Firebase:**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+    Firebase is a Backend-as-a-Service (Baas). It help in the easy storing and retrieval of dynamic content.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1.Sign in :
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![alt_text](/src/images/Signin.png "image_tooltip")
 
-### Analyzing the Bundle Size
+2.Home Page
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![alt_text](/src/images/Home1.png "image_tooltip")
+3.Group Chat and Private Chat
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Group Chat
+![alt_text](/src/images/GroupChat.png "image_tooltip")
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+Private Chat
+![alt_text](/src/images/PrivateChat.png "image_tooltip")
+
+
+4.Group Wishlist and Private Wishlist
+
+Group Wishlist
+
+![alt_text](/src/images/GroupWishlist.png "image_tooltip")
+
+
+
+
+
+Private Wishlist
+![alt_text](/src/images/PrivateWishlist.png "image_tooltip")
+
+
+5.Sharing and Adding Suggestions for an item either in groups or in private chat
+
+
+
+
+![alt_text](/src/images/sharechat.png "image_tooltip")
+
+
+**Future Improvements :**
+
+
+
+1. Adding a recommendation system
+2. Polling for different items to get the opinion of friends.
+
+
+**Contributors :**
+
+1.Aditi1709
+
+2.Salonii02
+
+**References :**
+
+
+
+1. [Cloud Firestore | Firebase](https://firebase.google.com/docs/firestore)
+2. [Components](https://material.io/components)
+3. [Get realtime updates with Cloud Firestore | Firebase](https://firebase.google.com/docs/firestore/query-data/listen)

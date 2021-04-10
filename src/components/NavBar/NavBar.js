@@ -29,25 +29,21 @@ function NavBar() {
     if (user.uid) {
       db.collection("user")
         .doc(user.uid)
-        .get()
-        .then(doc => {
+        .onSnapshot(doc => {
           wishlist = doc.data().wishlist;
           //console.log("Wishlist", wishlist);
           let tempItems = [];
           wishlist.forEach(itemid => {
             db.collection("Items")
               .doc(itemid)
-              .get()
-              .then(doc => {
+              .onSnapshot(doc => {
                 tempItems.push(doc.data());
                 console.log("EachtempItem", doc.data());
-              })
-              .catch(error => console.log(error));
+              });
           });
           console.log("saloniprivate", tempItems);
           setitems(tempItems);
-        })
-        .catch(error => console.log(error));
+        });
     }
   }, [user.uid]);
   return (
@@ -68,7 +64,7 @@ function NavBar() {
           <div className={classes.button}>
             <div classes="icons__right">
               <IconButton>
-                <PersonOutlineIcon color="secondary" />
+                <PersonOutlineIcon style={{ color: "#f73378" }} />
               </IconButton>
               <IconButton onClick={handleGroupWishlistOpen}>
                 <FavoriteBorderIcon style={{ color: "#f73378" }} />
@@ -101,7 +97,7 @@ function NavBar() {
                 </DialogActions>
               </Dialog>
               <IconButton>
-                <LocalMallIcon color="secondary" />
+                <LocalMallIcon style={{ color: "#f73378" }} />
               </IconButton>
             </div>
           </div>

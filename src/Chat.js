@@ -25,10 +25,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles({
   root: {
-    maxWidth: 200
+    maxWidth: 400
   },
   media: {
-    height: 140
+    height: 380
   }
 });
 function Chat() {
@@ -73,25 +73,21 @@ function Chat() {
       let wishlist = [];
       db.collection("group")
         .doc(roomId)
-        .get()
-        .then(doc => {
+        .onSnapshot(doc => {
           wishlist = doc.data().wishlist;
           //console.log("Wishlist", wishlist);
           let tempItems = [];
           wishlist.forEach(itemid => {
             db.collection("Items")
               .doc(itemid)
-              .get()
-              .then(doc => {
+              .onSnapshot(doc => {
                 tempItems.push(doc.data());
                 console.log("EachtempItem", doc.data());
-              })
-              .catch(error => console.log(error));
+              });
           });
           console.log("saloni", tempItems);
           setitems(tempItems);
-        })
-        .catch(error => console.log(error));
+        });
       // if(messages){
       // console.log(mess);
       // let i=0;
@@ -220,7 +216,7 @@ function Chat() {
                     title={message.message[2]}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="subtitle2" component="h2">
                       {message.message[0]}
                     </Typography>
                     {
