@@ -77,6 +77,7 @@ function Chat() {
           wishlist = doc.data().wishlist;
           //console.log("Wishlist", wishlist);
           let tempItems = [];
+          if(wishlist){
           wishlist.forEach(itemid => {
             db.collection("Items")
               .doc(itemid)
@@ -85,6 +86,7 @@ function Chat() {
                 console.log("EachtempItem", doc.data());
               });
           });
+        }
           console.log("saloni", tempItems);
           setitems(tempItems);
         });
