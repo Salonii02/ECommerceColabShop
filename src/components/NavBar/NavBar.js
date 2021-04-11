@@ -45,7 +45,7 @@ function NavBar() {
           setitems(tempItems);
         });
     }
-  }, [user.uid]);
+  }, []);
   return (
     <div className="navbar">
       <AppBar position="fixed" className={classes.appBar} color="inherit">

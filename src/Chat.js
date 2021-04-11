@@ -90,26 +90,8 @@ function Chat() {
           console.log("saloni", tempItems);
           setitems(tempItems);
         });
-      // if(messages){
-      // console.log(mess);
-      // let i=0;
-      // for(i=0;i<mess.length;i++){
-      //   if(mess[i][1]!=""){
-      //     db.collection("Items").doc(mess[1])
-      //     .get()
-      //     .then((doc)=> setitem(doc.data()))
-      //     .catch((error)=>console.log(error));
-      //   }
-      // }
-      // }
-      // console.log(item);
-      //if(messages.message[1]){
-      // db.collection("Items").doc(messages.message[1])
-      //   .get()
-      //   .then((doc)=> setitem(doc.data()))
-      //   .catch((error)=>console.log(error));
-      // console.log(item);
-      // }
+  
+  
     }
   }, [roomId]);
   const sendMessage = e => {
@@ -126,32 +108,8 @@ function Chat() {
       .catch();
     setInput("");
   };
-  // function fetchGroupwishlist() {
-  //   let wishlist = [];
-  //   db.collection("group")
-  //     .doc(roomId)
-  //     .get()
-  //     .then(doc => {
-  //       wishlist = doc.data().wishlist;
-  //       console.log("Wishlist", wishlist);
-  //       //  setwishlistgroup(wishlist);
-  //       //  console.log(wishlistgroup);
-  //       let tempItems = [];
-  //       wishlist.forEach(itemid => {
-  //         db.collection("Items")
-  //           .doc(itemid)
-  //           .get()
-  //           .then(doc => {
-  //             tempItems.push(doc.data());
-  //             console.log("tempItems", doc.data());
-  //           })
-  //           .catch(error => console.log(error));
-  //       });
-  //       console.log("saloni", tempItems);
-  //       setitems(tempItems);
-  //     })
-  //     .catch(error => console.log(error));
-  // }
+  
+
   function handleGroupWishlistOpen() {
     setWishlist(true);
     // fetchGroupwishlist();
@@ -184,7 +142,7 @@ function Chat() {
               <Grid container justify="center" spacing={4}>
                 {items.map(item => (
                   <Grid item key={item.id} xs={12} sm={6}>
-                    <GroupWishlist item={item} />
+                    <GroupWishlist uid={user.uid} item={item} />
                   </Grid>
                 ))}
               </Grid>
