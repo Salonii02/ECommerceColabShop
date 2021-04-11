@@ -1,4 +1,4 @@
-[**COLLABORATIVE SHOPPING FOR E-COMMERCE**](https://colabshop.herokuapp.com/)
+[COLLABORATIVE SHOPPING FOR E-COMMERCE](https://colabshop.herokuapp.com/)
 
 
 With “**ColabShop**” we aim to **stimulate** this participation of peers, bringing in new features providing a **collaborative shopping experience** with your family or friends.
